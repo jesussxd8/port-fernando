@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="scroll-smooth" lang="es"><head>
+<html lang="es" class="loaded"><head>
 
 <script class="injected-ffc2e83d85">
 (function(){'use strict';function l(a){var c=0;return function(){return c<a.length?{done:!1,value:a[c++]}:{done:!0}}}function r(a){var c=typeof Symbol!="undefined"&&Symbol.iterator&&a[Symbol.iterator];if(c)return c.call(a);if(typeof a.length=="number")return{next:l(a)};throw Error(String(a)+" is not an iterable or ArrayLike");}var t=typeof Object.defineProperties=="function"?Object.defineProperty:function(a,c,g){if(a==Array.prototype||a==Object.prototype)return a;a[c]=g.value;return a};
@@ -45,7 +45,7 @@ var m=["material-icons","material-symbols-outlined","material-symbols-rounded","
 <script class="injected-ffc2e83d85">
 const IMG_SEARCH_REPLACE_MAP = {};
 const IMG_SEARCH_ATTRIBUTION_MAP = {};
-const IMG_GEN_REPLACE_MAP = {"male sysadmin with beard and glasses sitting in gaming chair with monitors cyberpunk style professional headshot": "https://lh3.googleusercontent.com/gg-dl/AOI_d__LQpN800fAEyAHNx8C_SlzrZ9gCVWnvNA1iz_CqyEejV-Pj7uIM0rXe9XMKQRA_iG_IKXsa6OSyngf0BHl9pmNHmhEsVzoqjgoNQgkybD54LC9N4RxmmIwXInvWCPUeFxN05H9RyYasKOk7IX0TDWFQTdxcAW23vVgvG4Gmpy0v64x0A"};
+const IMG_GEN_REPLACE_MAP = {"male sysadmin with beard and glasses sitting in gaming chair with monitors cyberpunk style professional headshot": "https://lh3.googleusercontent.com/gg-dl/AOI_d_-q9yTDjFWsTmbQ_MVFWzIz_373ilG1ghWxMlSGqv8ic8Kd3qd9Ahuk7tByBRK_VnnRHVXsVaJVu4VNZ_5tAllCrVLBOhu_bgbx4RuJcCfVmjGAkoJaJaQwW0wfHtkSq4WLHn3e86cmEUGws_UyZnpaIbkgpcVyo20lyKJ4HDU3kKmLEA"};
 const MAY_HAVE_BACKGROUND_IMAGE = false;
 const IMG_SEARCH_REIMAGINE_PARAM = "1";
 </script>
@@ -230,12 +230,10 @@ function(){de()}):de()})();}).call(this);
                         }
                     },
                     animation: {
-                        'blob': 'blob 7s infinite',
+                        'blob': 'blob 10s infinite',
                         'float': 'float 6s ease-in-out infinite',
-                        'marquee': 'marquee 40s linear infinite', /* FIXED: Much slower speed (40s) */
-                        'scan': 'scan 2s linear infinite',
+                        'marquee': 'marquee 60s linear infinite', /* Slow speed as requested */
                         'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         blob: {
@@ -250,31 +248,47 @@ function(){de()}):de()})();}).call(this);
                         },
                         marquee: {
                             '0%': { transform: 'translateX(0)' },
-                            '100%': { transform: 'translateX(-50%)' }, /* FIXED: Smooth infinite loop logic */
-                        },
-                        scan: {
-                            '0%': { backgroundPosition: '0% 0%' },
-                            '100%': { backgroundPosition: '0% 100%' },
+                            '100%': { transform: 'translateX(-50%)' },
                         }
                     },
                     zIndex: {
-                        '60': '60', // Menu
-                        '9999': '9999', // Loader (Fixed z-index issue)
+                        'navbar': '50',
+                        'mobile-menu': '60',
+                        'loader': '9999',
                     }
                 }
             }
         }
     </script>
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet">
-    
-    <!-- Material Symbols -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
-    
+
     <style>
+        /* Base Setup */
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #020617;
+            color: #f1f5f9;
+            /* Disable native scroll restoration to force top on reload */
+            scroll-behavior: auto; 
+        }
+
+        /* Enable smooth scroll only after loading */
+        html.loaded {
+            scroll-behavior: smooth;
+        }
+
+        /* Prevent scrolling while loading */
+        body.loading {
+            overflow: hidden !important;
+            height: 100vh;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #020617; }
@@ -283,16 +297,16 @@ function(){de()}):de()})();}).call(this);
 
         /* Glassmorphism */
         .glass {
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(15, 23, 42, 0.7);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         .glass-card {
             background: rgba(30, 41, 59, 0.4);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             will-change: transform, box-shadow;
         }
         .glass-card:hover {
@@ -300,9 +314,6 @@ function(){de()}):de()})();}).call(this);
             transform: translateY(-5px);
             box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.2);
         }
-
-        /* Neon Text */
-        .text-glow { text-shadow: 0 0 10px rgba(6, 182, 212, 0.5); }
 
         /* Timeline Line */
         .timeline-line::before {
@@ -313,24 +324,22 @@ function(){de()}):de()})();}).call(this);
             z-index: 0;
         }
         
-        /* Preloader Styles - Fixed Visibility */
+        /* Preloader Styles - Forced Visibility */
         #loader {
             position: fixed;
-            top: 0; 
-            left: 0; 
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0; width: 100%; height: 100%;
             background-color: #020617;
-            z-index: 9999; /* Highest priority */
+            z-index: 9999;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            opacity: 1; /* Default visible */
-            visibility: visible; /* Default visible */
+            opacity: 1;
+            visibility: visible;
             transition: opacity 0.5s ease-out, visibility 0.5s;
         }
         
+        /* Scanline Effect */
         .scanline-bg {
             background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
             background-size: 100% 4px;
@@ -340,26 +349,28 @@ function(){de()}):de()})();}).call(this);
             z-index: 10;
         }
 
-        /* Mobile Menu Fix */
+        /* Mobile Menu - Fixed Positioning */
         #mobileMenu {
             position: fixed;
-            top: 0; left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0; width: 100%; height: 100%;
             overflow-y: auto;
             overscroll-behavior: contain;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            /* Ensure it is below loader but above navbar */
             z-index: 60; 
         }
         
-        .animate-blob { will-change: transform; transform: translateZ(0); }
+        /* Performance Optimization */
+        .hw-accel { will-change: transform; transform: translateZ(0); }
     </style>
-    <!-- 
-    Image Pre-planning:
-    "/gen?prompt=male+sysadmin+with+beard+and+glasses+sitting+in+gaming+chair+with+monitors+cyberpunk+style+professional+headshot&aspect=1:1"
-    -->
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:Fira Code, monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.inset-2{inset:0.5rem}.inset-4{inset:1rem}.-bottom-1{bottom:-0.25rem}.-bottom-8{bottom:-2rem}.-left-4{left:-1rem}.-left-\[39px\]{left:-39px}.-right-4{right:-1rem}.bottom-0{bottom:0px}.bottom-10{bottom:2.5rem}.bottom-8{bottom:2rem}.left-0{left:0px}.left-1\/2{left:50%}.left-20{left:5rem}.right-0{right:0px}.right-6{right:1.5rem}.top-0{top:0px}.top-1{top:0.25rem}.top-6{top:1.5rem}.z-10{z-index:10}.z-20{z-index:20}.z-50{z-index:50}.z-\[-1\]{z-index:-1}.order-1{order:1}.order-2{order:2}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-12{margin-bottom:3rem}.mb-16{margin-bottom:4rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-1{margin-top:0.25rem}.mt-12{margin-top:3rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-0\.5{height:0.125rem}.h-1\.5{height:0.375rem}.h-10{height:2.5rem}.h-16{height:4rem}.h-2{height:0.5rem}.h-20{height:5rem}.h-24{height:6rem}.h-6{height:1.5rem}.h-72{height:18rem}.h-8{height:2rem}.h-full{height:100%}.h-px{height:1px}.h-32{height:8rem}.min-h-screen{min-height:100vh}.w-0{width:0px}.w-10{width:2.5rem}.w-16{width:4rem}.w-2{width:0.5rem}.w-24{width:6rem}.w-6{width:1.5rem}.w-64{width:16rem}.w-72{width:18rem}.w-8{width:2rem}.w-full{width:100%}.w-max{width:max-content}.max-w-4xl{max-width:56rem}.max-w-lg{max-width:32rem}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-x-full{--tw-translate-x:100%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes spin{to{transform:rotate(360deg)}}.animate-\[spin_10s_linear_infinite\]{animation:spin 10s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.animate-\[spin_15s_linear_infinite_reverse\]{animation:spin 15s linear infinite reverse}@keyframes blob{0%{transform:translate(0px, 0px) scale(1)}33%{transform:translate(30px, -50px) scale(1.1)}66%{transform:translate(-20px, 20px) scale(0.9)}100%{transform:translate(0px, 0px) scale(1)}}.animate-blob{animation:blob 7s infinite}@keyframes bounce{0%, 100%{transform:translateY(-25%);animation-timing-function:cubic-bezier(0.8,0,1,1)}50%{transform:none;animation-timing-function:cubic-bezier(0,0,0.2,1)}}.animate-bounce{animation:bounce 1s infinite}@keyframes float{0%, 100%{transform:translateY(0)}50%{transform:translateY(-20px)}}.animate-float{animation:float 6s ease-in-out infinite}@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}.animate-marquee{animation:marquee 40s linear infinite}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}@keyframes pulse{50%{opacity:.5}}.animate-pulse-fast{animation:pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite}@keyframes pulse{50%{opacity:.5}}.animate-pulse-slow{animation:pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-default{cursor:default}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-12{gap:3rem}.gap-16{gap:4rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-x-8 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(2rem * var(--tw-space-x-reverse));margin-left:calc(2rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-12 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(3rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(3rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-hidden{overflow-x:hidden}.scroll-smooth{scroll-behavior:smooth}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.rounded-bl-full{border-bottom-left-radius:9999px}.border{border-width:1px}.border-2{border-width:2px}.border-4{border-width:4px}.border-b{border-bottom-width:1px}.border-b-4{border-bottom-width:4px}.border-l-4{border-left-width:4px}.border-r-2{border-right-width:2px}.border-t{border-top-width:1px}.border-l-2{border-left-width:2px}.border-cyber-accent{--tw-border-opacity:1;border-color:rgb(139 92 246 / var(--tw-border-opacity, 1))}.border-cyber-border{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-cyber-border\/50{border-color:rgb(30 41 59 / 0.5)}.border-cyber-card{--tw-border-opacity:1;border-color:rgb(15 23 42 / var(--tw-border-opacity, 1))}.border-cyber-muted{--tw-border-opacity:1;border-color:rgb(148 163 184 / var(--tw-border-opacity, 1))}.border-cyber-primary{--tw-border-opacity:1;border-color:rgb(6 182 212 / var(--tw-border-opacity, 1))}.border-cyber-primary\/30{border-color:rgb(6 182 212 / 0.3)}.border-cyber-secondary{--tw-border-opacity:1;border-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.border-cyber-secondary\/30{border-color:rgb(16 185 129 / 0.3)}.border-transparent{border-color:transparent}.border-l-cyber-accent{--tw-border-opacity:1;border-left-color:rgb(139 92 246 / var(--tw-border-opacity, 1))}.border-l-cyber-secondary{--tw-border-opacity:1;border-left-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.bg-cyber-accent{--tw-bg-opacity:1;background-color:rgb(139 92 246 / var(--tw-bg-opacity, 1))}.bg-cyber-border{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-cyber-card{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-cyber-card\/30{background-color:rgb(15 23 42 / 0.3)}.bg-cyber-dark{--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.bg-cyber-dark\/50{background-color:rgb(2 6 23 / 0.5)}.bg-cyber-dark\/95{background-color:rgb(2 6 23 / 0.95)}.bg-cyber-primary{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.bg-cyber-primary\/10{background-color:rgb(6 182 212 / 0.1)}.bg-cyber-primary\/20{background-color:rgb(6 182 212 / 0.2)}.bg-cyber-secondary{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-cyber-secondary\/10{background-color:rgb(16 185 129 / 0.1)}.bg-cyber-secondary\/20{background-color:rgb(16 185 129 / 0.2)}.bg-transparent{background-color:transparent}.bg-cyber-dark\/80{background-color:rgb(2 6 23 / 0.8)}.bg-gradient-to-b{background-image:linear-gradient(to bottom, var(--tw-gradient-stops))}.bg-gradient-to-l{background-image:linear-gradient(to left, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-cyber-dark{--tw-gradient-from:#020617 var(--tw-gradient-from-position);--tw-gradient-to:rgb(2 6 23 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyber-primary{--tw-gradient-from:#06b6d4 var(--tw-gradient-from-position);--tw-gradient-to:rgb(6 182 212 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-blue-400{--tw-gradient-to:rgb(96 165 250 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #60a5fa var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-cyber-card{--tw-gradient-to:#0f172a var(--tw-gradient-to-position)}.to-cyber-secondary{--tw-gradient-to:#10b981 var(--tw-gradient-to-position)}.to-transparent{--tw-gradient-to:transparent var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.fill-current{fill:currentColor}.object-cover{object-fit:cover}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-20{padding-top:5rem;padding-bottom:5rem}.py-24{padding-top:6rem;padding-bottom:6rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-2{padding-bottom:0.5rem}.pl-8{padding-left:2rem}.pr-1{padding-right:0.25rem}.pt-20{padding-top:5rem}.text-left{text-align:left}.text-center{text-align:center}.font-mono{font-family:Fira Code, monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-\[10px\]{font-size:10px}.text-\[20px\]{font-size:20px}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.uppercase{text-transform:uppercase}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-tighter{letter-spacing:-0.05em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-blue-400{--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}.text-cyber-accent{--tw-text-opacity:1;color:rgb(139 92 246 / var(--tw-text-opacity, 1))}.text-cyber-muted{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-cyber-primary{--tw-text-opacity:1;color:rgb(6 182 212 / var(--tw-text-opacity, 1))}.text-cyber-secondary{--tw-text-opacity:1;color:rgb(16 185 129 / var(--tw-text-opacity, 1))}.text-cyber-text{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-green-400{--tw-text-opacity:1;color:rgb(74 222 128 / var(--tw-text-opacity, 1))}.text-pink-400{--tw-text-opacity:1;color:rgb(244 114 182 / var(--tw-text-opacity, 1))}.text-pink-500{--tw-text-opacity:1;color:rgb(236 72 153 / var(--tw-text-opacity, 1))}.text-purple-400{--tw-text-opacity:1;color:rgb(192 132 252 / var(--tw-text-opacity, 1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-400{--tw-text-opacity:1;color:rgb(250 204 21 / var(--tw-text-opacity, 1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-10{opacity:0.1}.opacity-20{opacity:0.2}.opacity-50{opacity:0.5}.opacity-60{opacity:0.6}.opacity-70{opacity:0.7}.opacity-80{opacity:0.8}.mix-blend-multiply{mix-blend-mode:multiply}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-\[0_0_10px_\#10b981\]{--tw-shadow:0 0 10px #10b981;--tw-shadow-colored:0 0 10px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-\[0_0_20px_rgba\(6\2c 182\2c 212\2c 0\.3\)\]{--tw-shadow:0 0 20px rgba(6,182,212,0.3);--tw-shadow-colored:0 0 20px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.blur-2xl{--tw-blur:blur(40px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-3xl{--tw-blur:blur(64px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-xl{--tw-blur:blur(24px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.grayscale{--tw-grayscale:grayscale(100%);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-xl{--tw-backdrop-blur:blur(24px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.duration-500{transition-duration:500ms}.selection\:bg-cyber-primary *::selection{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.selection\:text-white *::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.selection\:bg-cyber-primary::selection{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.selection\:text-white::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:-translate-y-1:hover{--tw-translate-y:-0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:scale-105:hover{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:border-cyber-primary:hover{--tw-border-opacity:1;border-color:rgb(6 182 212 / var(--tw-border-opacity, 1))}.hover\:border-cyber-secondary:hover{--tw-border-opacity:1;border-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.hover\:bg-cyber-accent:hover{--tw-bg-opacity:1;background-color:rgb(139 92 246 / var(--tw-bg-opacity, 1))}.hover\:bg-cyber-border\/50:hover{background-color:rgb(30 41 59 / 0.5)}.hover\:bg-cyber-card:hover{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.hover\:bg-cyber-primary:hover{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.hover\:bg-cyber-primary\/80:hover{background-color:rgb(6 182 212 / 0.8)}.hover\:bg-cyber-secondary:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-cyber-secondary\/10:hover{background-color:rgb(16 185 129 / 0.1)}.hover\:bg-pink-500:hover{--tw-bg-opacity:1;background-color:rgb(236 72 153 / var(--tw-bg-opacity, 1))}.hover\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.hover\:text-blue-500:hover{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.hover\:text-cyber-primary:hover{--tw-text-opacity:1;color:rgb(6 182 212 / var(--tw-text-opacity, 1))}.hover\:text-cyber-secondary:hover{--tw-text-opacity:1;color:rgb(16 185 129 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:opacity-100:hover{opacity:1}.hover\:shadow-\[0_0_20px_rgba\(6\2c 182\2c 212\2c 0\.4\)\]:hover{--tw-shadow:0 0 20px rgba(6,182,212,0.4);--tw-shadow-colored:0 0 20px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-\[0_0_30px_rgba\(16\2c 185\2c 129\2c 0\.3\)\]:hover{--tw-shadow:0 0 30px rgba(16,185,129,0.3);--tw-shadow-colored:0 0 30px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-\[0_5px_20px_rgba\(139\2c 92\2c 246\2c 0\.15\)\]:hover{--tw-shadow:0 5px 20px rgba(139,92,246,0.15);--tw-shadow-colored:0 5px 20px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-\[0_5px_20px_rgba\(16\2c 185\2c 129\2c 0\.15\)\]:hover{--tw-shadow:0 5px 20px rgba(16,185,129,0.15);--tw-shadow-colored:0 5px 20px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-\[0_5px_20px_rgba\(6\2c 182\2c 212\2c 0\.15\)\]:hover{--tw-shadow:0 5px 20px rgba(6,182,212,0.15);--tw-shadow-colored:0 5px 20px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:grayscale-0:hover{--tw-grayscale:grayscale(0);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.hover\:\[animation-play-state\:paused\]:hover{animation-play-state:paused}.focus\:border-cyber-primary:focus{--tw-border-opacity:1;border-color:rgb(6 182 212 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.group:hover .group-hover\:w-full{width:100%}.group:hover .group-hover\:scale-110{--tw-scale-x:1.1;--tw-scale-y:1.1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.group:hover .group-hover\:animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.group:hover .group-hover\:bg-cyber-accent{--tw-bg-opacity:1;background-color:rgb(139 92 246 / var(--tw-bg-opacity, 1))}.group:hover .group-hover\:bg-cyber-muted{--tw-bg-opacity:1;background-color:rgb(148 163 184 / var(--tw-bg-opacity, 1))}.group:hover .group-hover\:bg-cyber-primary{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.group:hover .group-hover\:bg-cyber-primary\/20{background-color:rgb(6 182 212 / 0.2)}.group:hover .group-hover\:bg-cyber-secondary{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:block{display:block}.md\:flex{display:flex}.md\:hidden{display:none}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:text-base{font-size:1rem;line-height:1.5rem}}@media (min-width: 1024px){.lg\:right-10{right:2.5rem}.lg\:order-1{order:1}.lg\:order-2{order:2}.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:h-96{height:24rem}.lg\:w-96{width:24rem}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:text-2xl{font-size:1.5rem;line-height:2rem}.lg\:text-7xl{font-size:4.5rem;line-height:1}}</style><link type="text/css" href="https://fonts.googleapis.com/css2?family=Google+Symbols:opsz,wght,FILL,GRAD,ROND@24,400,0,0,50&amp;icon_names=link" rel="stylesheet"><style id="dyn-img-link-styles-di-script">
+
+    <!-- Force Top Scroll immediately on parse -->
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0,0);
+    </script>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:Fira Code, monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.inset-2{inset:0.5rem}.inset-4{inset:1rem}.-bottom-1{bottom:-0.25rem}.-bottom-8{bottom:-2rem}.-left-4{left:-1rem}.-left-\[39px\]{left:-39px}.-right-4{right:-1rem}.bottom-0{bottom:0px}.bottom-10{bottom:2.5rem}.bottom-8{bottom:2rem}.left-0{left:0px}.left-1\/2{left:50%}.left-20{left:5rem}.right-0{right:0px}.right-6{right:1.5rem}.top-0{top:0px}.top-1{top:0.25rem}.top-6{top:1.5rem}.z-0{z-index:0}.z-10{z-index:10}.z-20{z-index:20}.z-50{z-index:50}.order-1{order:1}.order-2{order:2}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-12{margin-bottom:3rem}.mb-16{margin-bottom:4rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-1{margin-top:0.25rem}.mt-12{margin-top:3rem}.mt-2{margin-top:0.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-0\.5{height:0.125rem}.h-1\.5{height:0.375rem}.h-10{height:2.5rem}.h-16{height:4rem}.h-2{height:0.5rem}.h-20{height:5rem}.h-24{height:6rem}.h-6{height:1.5rem}.h-72{height:18rem}.h-8{height:2rem}.h-full{height:100%}.h-px{height:1px}.h-32{height:8rem}.min-h-screen{min-height:100vh}.w-0{width:0px}.w-10{width:2.5rem}.w-16{width:4rem}.w-2{width:0.5rem}.w-24{width:6rem}.w-6{width:1.5rem}.w-64{width:16rem}.w-72{width:18rem}.w-8{width:2rem}.w-full{width:100%}.w-max{width:max-content}.max-w-4xl{max-width:56rem}.max-w-lg{max-width:32rem}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-x-full{--tw-translate-x:100%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes spin{to{transform:rotate(360deg)}}.animate-\[spin_10s_linear_infinite\]{animation:spin 10s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.animate-\[spin_15s_linear_infinite_reverse\]{animation:spin 15s linear infinite reverse}@keyframes blob{0%{transform:translate(0px, 0px) scale(1)}33%{transform:translate(30px, -50px) scale(1.1)}66%{transform:translate(-20px, 20px) scale(0.9)}100%{transform:translate(0px, 0px) scale(1)}}.animate-blob{animation:blob 10s infinite}@keyframes bounce{0%, 100%{transform:translateY(-25%);animation-timing-function:cubic-bezier(0.8,0,1,1)}50%{transform:none;animation-timing-function:cubic-bezier(0,0,0.2,1)}}.animate-bounce{animation:bounce 1s infinite}@keyframes float{0%, 100%{transform:translateY(0)}50%{transform:translateY(-20px)}}.animate-float{animation:float 6s ease-in-out infinite}@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}.animate-marquee{animation:marquee 60s linear infinite}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}@keyframes pulse{50%{opacity:.5}}.animate-pulse-fast{animation:pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-default{cursor:default}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-12{gap:3rem}.gap-16{gap:4rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-x-8 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(2rem * var(--tw-space-x-reverse));margin-left:calc(2rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-12 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(3rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(3rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.rounded-bl-full{border-bottom-left-radius:9999px}.border{border-width:1px}.border-2{border-width:2px}.border-4{border-width:4px}.border-b{border-bottom-width:1px}.border-b-4{border-bottom-width:4px}.border-l-4{border-left-width:4px}.border-r-2{border-right-width:2px}.border-t{border-top-width:1px}.border-l-2{border-left-width:2px}.border-cyber-accent{--tw-border-opacity:1;border-color:rgb(139 92 246 / var(--tw-border-opacity, 1))}.border-cyber-border{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-cyber-border\/50{border-color:rgb(30 41 59 / 0.5)}.border-cyber-card{--tw-border-opacity:1;border-color:rgb(15 23 42 / var(--tw-border-opacity, 1))}.border-cyber-muted{--tw-border-opacity:1;border-color:rgb(148 163 184 / var(--tw-border-opacity, 1))}.border-cyber-primary{--tw-border-opacity:1;border-color:rgb(6 182 212 / var(--tw-border-opacity, 1))}.border-cyber-primary\/30{border-color:rgb(6 182 212 / 0.3)}.border-cyber-secondary{--tw-border-opacity:1;border-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.border-cyber-secondary\/30{border-color:rgb(16 185 129 / 0.3)}.border-transparent{border-color:transparent}.border-l-cyber-accent{--tw-border-opacity:1;border-left-color:rgb(139 92 246 / var(--tw-border-opacity, 1))}.border-l-cyber-secondary{--tw-border-opacity:1;border-left-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.bg-cyber-accent{--tw-bg-opacity:1;background-color:rgb(139 92 246 / var(--tw-bg-opacity, 1))}.bg-cyber-border{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-cyber-card{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-cyber-card\/30{background-color:rgb(15 23 42 / 0.3)}.bg-cyber-dark{--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.bg-cyber-dark\/50{background-color:rgb(2 6 23 / 0.5)}.bg-cyber-dark\/95{background-color:rgb(2 6 23 / 0.95)}.bg-cyber-primary{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.bg-cyber-primary\/10{background-color:rgb(6 182 212 / 0.1)}.bg-cyber-primary\/20{background-color:rgb(6 182 212 / 0.2)}.bg-cyber-secondary{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-cyber-secondary\/10{background-color:rgb(16 185 129 / 0.1)}.bg-cyber-secondary\/20{background-color:rgb(16 185 129 / 0.2)}.bg-transparent{background-color:transparent}.bg-cyber-dark\/80{background-color:rgb(2 6 23 / 0.8)}.bg-gradient-to-b{background-image:linear-gradient(to bottom, var(--tw-gradient-stops))}.bg-gradient-to-l{background-image:linear-gradient(to left, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-cyber-dark{--tw-gradient-from:#020617 var(--tw-gradient-from-position);--tw-gradient-to:rgb(2 6 23 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyber-primary{--tw-gradient-from:#06b6d4 var(--tw-gradient-from-position);--tw-gradient-to:rgb(6 182 212 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-blue-400{--tw-gradient-to:rgb(96 165 250 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #60a5fa var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-cyber-card{--tw-gradient-to:#0f172a var(--tw-gradient-to-position)}.to-cyber-secondary{--tw-gradient-to:#10b981 var(--tw-gradient-to-position)}.to-transparent{--tw-gradient-to:transparent var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.fill-current{fill:currentColor}.object-cover{object-fit:cover}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-20{padding-top:5rem;padding-bottom:5rem}.py-24{padding-top:6rem;padding-bottom:6rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-2{padding-bottom:0.5rem}.pl-8{padding-left:2rem}.pr-1{padding-right:0.25rem}.pt-20{padding-top:5rem}.text-left{text-align:left}.text-center{text-align:center}.font-mono{font-family:Fira Code, monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-\[10px\]{font-size:10px}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.uppercase{text-transform:uppercase}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-tighter{letter-spacing:-0.05em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-blue-400{--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}.text-cyber-accent{--tw-text-opacity:1;color:rgb(139 92 246 / var(--tw-text-opacity, 1))}.text-cyber-muted{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-cyber-primary{--tw-text-opacity:1;color:rgb(6 182 212 / var(--tw-text-opacity, 1))}.text-cyber-secondary{--tw-text-opacity:1;color:rgb(16 185 129 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-green-400{--tw-text-opacity:1;color:rgb(74 222 128 / var(--tw-text-opacity, 1))}.text-pink-400{--tw-text-opacity:1;color:rgb(244 114 182 / var(--tw-text-opacity, 1))}.text-pink-500{--tw-text-opacity:1;color:rgb(236 72 153 / var(--tw-text-opacity, 1))}.text-purple-400{--tw-text-opacity:1;color:rgb(192 132 252 / var(--tw-text-opacity, 1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-400{--tw-text-opacity:1;color:rgb(250 204 21 / var(--tw-text-opacity, 1))}.opacity-10{opacity:0.1}.opacity-20{opacity:0.2}.opacity-50{opacity:0.5}.opacity-60{opacity:0.6}.opacity-70{opacity:0.7}.opacity-80{opacity:0.8}.mix-blend-multiply{mix-blend-mode:multiply}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-\[0_0_10px_\#10b981\]{--tw-shadow:0 0 10px #10b981;--tw-shadow-colored:0 0 10px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-\[0_0_20px_rgba\(6\2c 182\2c 212\2c 0\.3\)\]{--tw-shadow:0 0 20px rgba(6,182,212,0.3);--tw-shadow-colored:0 0 20px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.blur-2xl{--tw-blur:blur(40px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-\[100px\]{--tw-blur:blur(100px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-xl{--tw-blur:blur(24px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.grayscale{--tw-grayscale:grayscale(100%);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-xl{--tw-backdrop-blur:blur(24px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.duration-500{transition-duration:500ms}.hover\:-translate-y-1:hover{--tw-translate-y:-0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:scale-105:hover{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:border-cyber-primary:hover{--tw-border-opacity:1;border-color:rgb(6 182 212 / var(--tw-border-opacity, 1))}.hover\:bg-cyber-accent:hover{--tw-bg-opacity:1;background-color:rgb(139 92 246 / var(--tw-bg-opacity, 1))}.hover\:bg-cyber-border\/50:hover{background-color:rgb(30 41 59 / 0.5)}.hover\:bg-cyber-card:hover{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.hover\:bg-cyber-primary:hover{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.hover\:bg-cyber-primary\/80:hover{background-color:rgb(6 182 212 / 0.8)}.hover\:bg-cyber-secondary:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-cyber-secondary\/10:hover{background-color:rgb(16 185 129 / 0.1)}.hover\:bg-pink-500:hover{--tw-bg-opacity:1;background-color:rgb(236 72 153 / var(--tw-bg-opacity, 1))}.hover\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.hover\:text-blue-500:hover{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.hover\:text-cyber-primary:hover{--tw-text-opacity:1;color:rgb(6 182 212 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:opacity-100:hover{opacity:1}.hover\:shadow-\[0_0_20px_rgba\(6\2c 182\2c 212\2c 0\.4\)\]:hover{--tw-shadow:0 0 20px rgba(6,182,212,0.4);--tw-shadow-colored:0 0 20px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-\[0_0_30px_rgba\(16\2c 185\2c 129\2c 0\.3\)\]:hover{--tw-shadow:0 0 30px rgba(16,185,129,0.3);--tw-shadow-colored:0 0 30px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-\[0_5px_20px_rgba\(139\2c 92\2c 246\2c 0\.15\)\]:hover{--tw-shadow:0 5px 20px rgba(139,92,246,0.15);--tw-shadow-colored:0 5px 20px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-\[0_5px_20px_rgba\(16\2c 185\2c 129\2c 0\.15\)\]:hover{--tw-shadow:0 5px 20px rgba(16,185,129,0.15);--tw-shadow-colored:0 5px 20px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-\[0_5px_20px_rgba\(6\2c 182\2c 212\2c 0\.15\)\]:hover{--tw-shadow:0 5px 20px rgba(6,182,212,0.15);--tw-shadow-colored:0 5px 20px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:grayscale-0:hover{--tw-grayscale:grayscale(0);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.hover\:\[animation-play-state\:paused\]:hover{animation-play-state:paused}.focus\:border-cyber-primary:focus{--tw-border-opacity:1;border-color:rgb(6 182 212 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.group:hover .group-hover\:w-full{width:100%}.group:hover .group-hover\:scale-110{--tw-scale-x:1.1;--tw-scale-y:1.1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.group:hover .group-hover\:animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.group:hover .group-hover\:bg-cyber-accent{--tw-bg-opacity:1;background-color:rgb(139 92 246 / var(--tw-bg-opacity, 1))}.group:hover .group-hover\:bg-cyber-muted{--tw-bg-opacity:1;background-color:rgb(148 163 184 / var(--tw-bg-opacity, 1))}.group:hover .group-hover\:bg-cyber-primary{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.group:hover .group-hover\:bg-cyber-primary\/20{background-color:rgb(6 182 212 / 0.2)}.group:hover .group-hover\:bg-cyber-secondary{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:block{display:block}.md\:flex{display:flex}.md\:hidden{display:none}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:text-base{font-size:1rem;line-height:1.5rem}}@media (min-width: 1024px){.lg\:right-10{right:2.5rem}.lg\:order-1{order:1}.lg\:order-2{order:2}.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:h-96{height:24rem}.lg\:w-96{width:24rem}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:text-2xl{font-size:1.5rem;line-height:2rem}.lg\:text-7xl{font-size:4.5rem;line-height:1}}</style><link type="text/css" href="https://fonts.googleapis.com/css2?family=Google+Symbols:opsz,wght,FILL,GRAD,ROND@24,400,0,0,50&amp;icon_names=link" rel="stylesheet"><style id="dyn-img-link-styles-di-script">
       .dyn-img-link-wrapper-di-script {
         anchor-scope: all;
         display: contents;
@@ -458,9 +469,9 @@ function(){de()}):de()})();}).call(this);
         color: white;
       }
     </style></head>
-<body class="bg-cyber-dark text-cyber-text antialiased overflow-x-hidden selection:bg-cyber-primary selection:text-white">
+<body class="">
 
-    <!-- Preloader (Fixed: Always visible on load, 5s duration) -->
+    <!-- PRELOADER -->
     <div id="loader" style="opacity: 0; visibility: hidden; display: none;">
         <div class="scanline-bg"></div>
         <!-- Animated Logo -->
@@ -482,19 +493,21 @@ function(){de()}):de()})();}).call(this);
         </div>
         <!-- Version/Corner Text -->
         <div class="absolute bottom-8 text-[10px] text-cyber-muted font-mono uppercase tracking-widest">
-            System v2.0.26 // Security Protocol: Active
+            System v3.0 // Ready
         </div>
     </div>
 
-    <!-- Background Elements -->
-    <div class="fixed inset-0 pointer-events-none z-[-1]">
+    <!-- DYNAMIC BACKGROUND (Canvas + Blobs) -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <!-- Canvas for connecting lines -->
         <canvas class="absolute inset-0 opacity-20" id="networkCanvas" width="1722" height="663"></canvas>
-        <div class="absolute top-0 -left-4 w-72 h-72 bg-cyber-primary rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
-        <div class="absolute top-0 -right-4 w-72 h-72 bg-cyber-secondary rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-cyber-accent rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000"></div>
+        <!-- Animated Blobs -->
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-cyber-primary rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-cyber-secondary rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-cyber-accent rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob animation-delay-4000"></div>
     </div>
 
-    <!-- Navigation -->
+    <!-- NAVBAR -->
     <header class="fixed w-full top-0 z-50 transition-all duration-300 border-b border-transparent bg-cyber-dark/80 backdrop-blur-md shadow-lg" id="navbar">
         <div class="container mx-auto px-6 h-20 flex items-center justify-between">
             <!-- Logo -->
@@ -503,7 +516,6 @@ function(){de()}):de()})();}).call(this);
                 FVL
                 <span class="text-cyber-primary group-hover:animate-pulse">/&gt;</span>
             </a>
-            
             <!-- Desktop Nav -->
             <nav class="hidden md:flex items-center space-x-8">
                 <a class="text-sm font-medium hover:text-cyber-primary transition-colors relative group" href="#about">
@@ -523,7 +535,6 @@ function(){de()}):de()})();}).call(this);
                     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyber-primary transition-all group-hover:w-full"></span>
                 </a>
             </nav>
-
             <!-- Tools -->
             <div class="flex items-center gap-4">
                 <button class="px-3 py-1 rounded border border-cyber-border hover:border-cyber-primary text-xs font-mono transition-all" id="langToggle">
@@ -540,7 +551,7 @@ function(){de()}):de()})();}).call(this);
         </div>
     </header>
 
-    <!-- Mobile Menu Overlay (Outside Header, Z-Index 60) -->
+    <!-- MOBILE MENU OVERLAY -->
     <div class="md:hidden bg-cyber-dark/95 backdrop-blur-xl transform translate-x-full flex flex-col items-center justify-center space-y-8" id="mobileMenu">
         <button class="absolute top-6 right-6 text-cyber-muted hover:text-white p-2" id="closeMenuBtn">
             <span class="material-symbols-outlined text-4xl">close</span>
@@ -550,737 +561,412 @@ function(){de()}):de()})();}).call(this);
         <a class="text-2xl font-bold hover:text-cyber-primary transition-colors" data-i18n="nav.education" href="#education">Educación</a>
         <a class="text-2xl font-bold hover:text-cyber-primary transition-colors" data-i18n="nav.skills" href="#skills">Habilidades</a>
         <a class="text-2xl font-bold hover:text-cyber-primary transition-colors" data-i18n="nav.contact" href="#contact">Contacto</a>
-        <button class="flex items-center gap-2 text-cyber-secondary border border-cyber-secondary px-4 py-2 rounded-lg mt-4 hover:bg-cyber-secondary/10 transition-colors" id="mobileExportBtn">
-            <span class="material-symbols-outlined">file_save</span>
-            <span data-i18n="nav.export">Exportar Código</span>
-        </button>
     </div>
 
-    <!-- Hero Section -->
-    <section class="min-h-screen flex items-center pt-20 relative overflow-hidden">
-        <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
-            <!-- Text Content -->
-            <div class="order-2 lg:order-1 z-10" id="heroText">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-secondary/10 border border-cyber-secondary/30 text-cyber-secondary text-xs font-mono mb-6 animate-pulse-slow">
-                    <span class="w-2 h-2 rounded-full bg-cyber-secondary"></span>
-                    #OPENTOWORK
-                </div>
-                <h1 class="text-5xl lg:text-7xl font-bold tracking-tight mb-4 leading-tight">
-                    Fernando <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-primary via-blue-400 to-cyber-secondary text-glow">Valido López</span>
-                </h1>
-                <div class="h-10 mb-6">
-                    <span class="text-xl lg:text-2xl font-mono text-cyber-muted border-r-2 border-cyber-primary pr-1" id="typewriter">Admin. de Redes</span>
-                </div>
-                <p class="text-lg text-cyber-muted mb-8 max-w-lg leading-relaxed" data-i18n="hero.desc">
-                    Técnico Superior en Administración de Sistemas Informáticos en Red (ASIR). Especialista en soporte técnico, gestión de redes y microinformática.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <a class="px-8 py-3 bg-cyber-primary text-white font-bold rounded-lg hover:bg-cyber-primary/80 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(6,182,212,0.3)]" href="https://www.instagram.com/_infotechsolutions/profilecard/?igsh=NG00aXc0NGFremJl" target="_blank" rel="noopener noreferrer">
-                        <span class="material-symbols-outlined">rocket_launch</span>
-                        <span data-i18n="hero.cta">Ver Proyectos</span>
-                    </a>
-                    <!-- Direct Download Link -->
-                    <a class="px-8 py-3 bg-transparent border border-cyber-border text-white font-bold rounded-lg hover:bg-cyber-card transition-all flex items-center gap-2" href="./cv.pdf" download="Fernando_Valido_CV.pdf">
-                        <span class="material-symbols-outlined">download</span>
-                        <span>CV</span>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Visual Content -->
-            <div class="order-1 lg:order-2 flex justify-center relative z-10">
-                <div class="relative w-72 h-72 lg:w-96 lg:h-96 group">
-                    <!-- Spinning Rings -->
-                    <div class="absolute inset-0 rounded-full border border-cyber-primary/30 animate-[spin_10s_linear_infinite]"></div>
-                    <div class="absolute inset-4 rounded-full border border-cyber-secondary/30 animate-[spin_15s_linear_infinite_reverse]"></div>
-                    <!-- Image Container -->
-                    <div class="absolute inset-2 rounded-full overflow-hidden border-4 border-cyber-card shadow-2xl z-10">
-                        <img src="Fernando Valido.jpg" alt="Fernando Valido" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" style="">
+    <!-- MAIN CONTENT (z-10 to stay above background) -->
+    <main class="relative z-10">
+        
+        <!-- HERO SECTION -->
+        <section class="min-h-screen flex items-center pt-20 relative overflow-hidden">
+            <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Text -->
+                <div class="order-2 lg:order-1 z-10" id="heroText">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-secondary/10 border border-cyber-secondary/30 text-cyber-secondary text-xs font-mono mb-6 animate-pulse-slow">
+                        <span class="w-2 h-2 rounded-full bg-cyber-secondary"></span>
+                        #OPENTOWORK
                     </div>
-                    <!-- Floating Badge -->
-                    <div class="absolute bottom-0 right-0 lg:right-10 bg-cyber-card border border-cyber-secondary p-3 rounded-xl shadow-lg flex items-center gap-3 animate-float z-20">
-                        <span class="material-symbols-outlined text-cyber-secondary text-3xl">verified_user</span>
-                        <div>
-                            <p class="text-xs text-cyber-muted">Status</p>
-                            <p class="text-sm font-bold text-white">SysAdmin Ready</p>
-                        </div>
+                    <h1 class="text-5xl lg:text-7xl font-bold tracking-tight mb-4 leading-tight">
+                        Fernando <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-primary via-blue-400 to-cyber-secondary text-glow">Valido López</span>
+                    </h1>
+                    <div class="h-10 mb-6">
+                        <span class="text-xl lg:text-2xl font-mono text-cyber-muted border-r-2 border-cyber-primary pr-1" id="typewriter">Especiali</span>
+                    </div>
+                    <p class="text-lg text-cyber-muted mb-8 max-w-lg leading-relaxed" data-i18n="hero.desc">
+                        Técnico Superior en Administración de Sistemas Informáticos en Red (ASIR). Especialista en soporte técnico, gestión de redes y microinformática.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a class="px-8 py-3 bg-cyber-primary text-white font-bold rounded-lg hover:bg-cyber-primary/80 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(6,182,212,0.3)]" href="https://www.instagram.com/_infotechsolutions/profilecard/?igsh=NG00aXc0NGFremJl" rel="noopener noreferrer" target="_blank">
+                            <span class="material-symbols-outlined">rocket_launch</span>
+                            <span data-i18n="hero.cta">Ver Proyectos</span>
+                        </a>
+                        <a class="px-8 py-3 bg-transparent border border-cyber-border text-white font-bold rounded-lg hover:bg-cyber-card transition-all flex items-center gap-2" download="Fernando_Valido_CV.pdf" href="./cv.pdf">
+                            <span class="material-symbols-outlined">download</span>
+                            <span>CV</span>
+                        </a>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- Scroll Indicator -->
-        <a href="#about" class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 text-cyber-muted hover:text-white transition-colors animate-bounce">
-            <span class="text-xs font-mono">SCROLL</span>
-            <span class="material-symbols-outlined">keyboard_arrow_down</span>
-        </a>
-    </section>
-
-    <!-- About & Services Section -->
-    <section class="py-24 relative" id="about">
-        <div class="container mx-auto px-6">
-            <div class="grid lg:grid-cols-12 gap-12">
-                <!-- About Text -->
-                <div class="lg:col-span-5 space-y-8">
-                    <div class="flex items-center gap-4 mb-4">
-                        <span class="h-px w-10 bg-cyber-primary"></span>
-                        <span class="text-cyber-primary font-mono tracking-widest text-sm uppercase" data-i18n="section.about">Acerca de</span>
-                    </div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-white">
-                        <span data-i18n="about.title">Pasión por la tecnología</span> <br>
-                        <span class="text-cyber-secondary" data-i18n="about.subtitle">desde joven.</span>
-                    </h2>
-                    <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-cyber-primary/10 rounded-full blur-2xl group-hover:bg-cyber-primary/20 transition-all"></div>
-                        <p class="text-cyber-muted leading-relaxed mb-4 text-sm md:text-base" data-i18n="about.p1">
-                            Hola! Soy Fernando, una persona apasionada por informática y la tecnología. Nací y crecí en Las Palmas de Gran Canarias y actualmente resido en un pequeño pueblo de Telde.
-                        </p>
-                        <p class="text-cyber-muted leading-relaxed mb-4 text-sm md:text-base" data-i18n="about.p2">
-                            Desde joven, he sentido una profunda conexión con la informática. Siempre he encontrado inspiración y alegría en este campo en constante crecimiento, ya sea investigando o desarrollando proyectos.
-                        </p>
-                        <p class="text-cyber-muted leading-relaxed text-sm md:text-base" data-i18n="about.p3">
-                            Mi objetivo es crecer en el sector y seguir formándome de manera activa. Creo firmemente en la importancia de la superación propia, la constancia y los valores.
-                        </p>
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="flex-1 glass-card p-4 rounded-xl text-center">
-                            <span class="block text-3xl font-bold text-white mb-1">10+</span>
-                            <span class="text-xs text-cyber-muted uppercase tracking-wider" data-i18n="about.stats.years">Años Trabajando</span>
+                <!-- Visual -->
+                <div class="order-1 lg:order-2 flex justify-center relative z-10">
+                    <div class="relative w-72 h-72 lg:w-96 lg:h-96 group">
+                        <div class="absolute inset-0 rounded-full border border-cyber-primary/30 animate-[spin_10s_linear_infinite]"></div>
+                        <div class="absolute inset-4 rounded-full border border-cyber-secondary/30 animate-[spin_15s_linear_infinite_reverse]"></div>
+                        <div class="absolute inset-2 rounded-full overflow-hidden border-4 border-cyber-card shadow-2xl z-10">
+                            <img alt="Fernando Valido" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" fetchpriority="high" src="Fernando Valido.jpg" style="">
                         </div>
-                        <div class="flex-1 glass-card p-4 rounded-xl text-center">
-                            <span class="block text-3xl font-bold text-cyber-primary mb-1">20+</span>
-                            <span class="text-xs text-cyber-muted uppercase tracking-wider" data-i18n="about.stats.certs">Certificaciones</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Services Grid -->
-                <div class="lg:col-span-7">
-                    <div class="flex items-center gap-4 mb-8">
-                        <span class="h-px w-10 bg-cyber-secondary"></span>
-                        <span class="text-cyber-secondary font-mono tracking-widest text-sm uppercase" data-i18n="section.services">Servicios &amp; Aptitudes</span>
-                    </div>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group">
-                            <span class="material-symbols-outlined text-cyber-primary text-3xl mb-3 group-hover:scale-110 transition-transform">database</span>
-                            <h3 class="font-bold text-white text-sm" data-i18n="service.data">Recuperación de Datos</h3>
-                        </div>
-                        <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group">
-                            <span class="material-symbols-outlined text-cyber-secondary text-3xl mb-3 group-hover:scale-110 transition-transform">build</span>
-                            <h3 class="font-bold text-white text-sm" data-i18n="service.repair">Reparación de Equipos</h3>
-                        </div>
-                        <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group">
-                            <span class="material-symbols-outlined text-cyber-accent text-3xl mb-3 group-hover:scale-110 transition-transform">cloud_upload</span>
-                            <h3 class="font-bold text-white text-sm" data-i18n="service.backup">Copias de Seguridad</h3>
-                        </div>
-                        <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group">
-                            <span class="material-symbols-outlined text-blue-400 text-3xl mb-3 group-hover:scale-110 transition-transform">router</span>
-                            <h3 class="font-bold text-white text-sm" data-i18n="service.networks">Soporte de Redes</h3>
-                        </div>
-                        <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group">
-                            <span class="material-symbols-outlined text-pink-400 text-3xl mb-3 group-hover:scale-110 transition-transform">settings_ethernet</span>
-                            <h3 class="font-bold text-white text-sm" data-i18n="service.telecom">Telecomunicaciones</h3>
-                        </div>
-                        <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group">
-                            <span class="material-symbols-outlined text-yellow-400 text-3xl mb-3 group-hover:scale-110 transition-transform">home_iot_device</span>
-                            <h3 class="font-bold text-white text-sm" data-i18n="service.domotics">Domótica &amp; Redes</h3>
-                        </div>
-                        <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group">
-                            <span class="material-symbols-outlined text-red-400 text-3xl mb-3 group-hover:scale-110 transition-transform">support_agent</span>
-                            <h3 class="font-bold text-white text-sm" data-i18n="service.helpdesk">Helpdesk</h3>
-                        </div>
-                        <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group">
-                            <span class="material-symbols-outlined text-purple-400 text-3xl mb-3 group-hover:scale-110 transition-transform">web</span>
-                            <h3 class="font-bold text-white text-sm" data-i18n="service.web">Diseño Web / WP</h3>
-                        </div>
-                        <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group">
-                            <span class="material-symbols-outlined text-green-400 text-3xl mb-3 group-hover:scale-110 transition-transform">security</span>
-                            <h3 class="font-bold text-white text-sm" data-i18n="service.security">Ciberseguridad</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience & Education -->
-    <section class="py-24 bg-cyber-card/30 relative" id="experience">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-16">
-                <span class="border-b-4 border-cyber-primary pb-2" data-i18n="section.trajectory">Trayectoria Profesional</span>
-            </h2>
-            <div class="grid lg:grid-cols-2 gap-16">
-                <!-- Experience Column -->
-                <div>
-                    <div class="flex items-center gap-3 mb-8">
-                        <span class="material-symbols-outlined text-cyber-primary text-3xl">work</span>
-                        <h3 class="text-2xl font-bold text-white" data-i18n="exp.title">Experiencia Laboral</h3>
-                    </div>
-                    <div class="relative pl-8 timeline-line space-y-12">
-                        <!-- Item 1 -->
-                        <div class="relative group">
-                            <div class="absolute -left-[39px] top-1 w-6 h-6 rounded-full bg-cyber-card border-2 border-cyber-primary group-hover:bg-cyber-primary transition-colors z-10"></div>
-                            <div class="glass-card p-6 rounded-xl hover:shadow-[0_5px_20px_rgba(6,182,212,0.15)] transition-all">
-                                <span class="text-xs font-mono text-cyber-primary mb-1 block" data-i18n="exp.job1.date">Sept. 2013 - Actualidad</span>
-                                <h4 class="text-xl font-bold text-white" data-i18n="exp.job1.title">Repartidor / Camarero de Barra</h4>
-                                <p class="text-sm text-cyber-muted font-medium mb-3" data-i18n="exp.job1.company">Restaurante Pizzería 12-34</p>
-                                <p class="text-sm text-gray-400" data-i18n="exp.job1.desc">Demostración de constancia, trabajo en equipo y gestión del tiempo durante más de 12 años.</p>
-                            </div>
-                        </div>
-                        <!-- Item 2 -->
-                        <div class="relative group">
-                            <div class="absolute -left-[39px] top-1 w-6 h-6 rounded-full bg-cyber-card border-2 border-cyber-secondary group-hover:bg-cyber-secondary transition-colors z-10"></div>
-                            <div class="glass-card p-6 rounded-xl border-l-4 border-l-cyber-secondary hover:shadow-[0_5px_20px_rgba(16,185,129,0.15)] transition-all">
-                                <span class="text-xs font-mono text-cyber-secondary mb-1 block" data-i18n="exp.job2.date">May. 2025 - Jun. 2025</span>
-                                <h4 class="text-xl font-bold text-white" data-i18n="exp.job2.title">Prácticas: Instalador Sistemas</h4>
-                                <p class="text-sm text-cyber-muted font-medium mb-3">Grupo Inte</p>
-                                <p class="text-sm text-gray-400" data-i18n="exp.job2.desc">Instalación y mantenimiento de sistemas de comunicaciones y redes.</p>
-                            </div>
-                        </div>
-                        <!-- Item 3 -->
-                        <div class="relative group">
-                            <div class="absolute -left-[39px] top-1 w-6 h-6 rounded-full bg-cyber-card border-2 border-cyber-accent group-hover:bg-cyber-accent transition-colors z-10"></div>
-                            <div class="glass-card p-6 rounded-xl border-l-4 border-l-cyber-accent hover:shadow-[0_5px_20px_rgba(139,92,246,0.15)] transition-all">
-                                <span class="text-xs font-mono text-cyber-accent mb-1 block" data-i18n="exp.job3.date">Abr. 2024 - Jun. 2024</span>
-                                <h4 class="text-xl font-bold text-white" data-i18n="exp.job3.title">Prácticas: Tec. Informático</h4>
-                                <p class="text-sm text-cyber-muted font-medium mb-3">Cluster Marítimo de Canarias</p>
-                                <p class="text-sm text-gray-400" data-i18n="exp.job3.desc">Resolución de incidencias, Gestión de proyectos y soporte técnico de primer nivel.</p>
-                            </div>
-                        </div>
-                        <!-- Item 4 -->
-                        <div class="relative group">
-                            <div class="absolute -left-[39px] top-1 w-6 h-6 rounded-full bg-cyber-card border-2 border-cyber-muted group-hover:bg-cyber-muted transition-colors z-10"></div>
-                            <div class="glass-card p-6 rounded-xl grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100">
-                                <span class="text-xs font-mono text-cyber-muted mb-1 block" data-i18n="exp.job4.date">Sept. 2011 - Sept. 2012</span>
-                                <h4 class="text-xl font-bold text-white" data-i18n="exp.job4.title">Repartidor / Camarero</h4>
-                                <p class="text-sm text-cyber-muted font-medium">Restaurante Pizzería Il Sapore</p>
+                        <div class="absolute bottom-0 right-0 lg:right-10 bg-cyber-card border border-cyber-secondary p-3 rounded-xl shadow-lg flex items-center gap-3 animate-float z-20">
+                            <span class="material-symbols-outlined text-cyber-secondary text-3xl">verified_user</span>
+                            <div>
+                                <p class="text-xs text-cyber-muted">Status</p>
+                                <p class="text-sm font-bold text-white">SysAdmin Ready</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Education Column -->
-                <div id="education">
-                    <div class="flex items-center gap-3 mb-8">
-                        <span class="material-symbols-outlined text-cyber-secondary text-3xl">school</span>
-                        <h3 class="text-2xl font-bold text-white" data-i18n="edu.title">Formación Académica</h3>
-                    </div>
-                    <div class="space-y-6">
-                        <!-- Edu 1 -->
-                        <div class="glass-card p-6 rounded-xl relative overflow-hidden group">
-                            <div class="absolute top-0 right-0 w-16 h-16 bg-cyber-primary/20 rounded-bl-full group-hover:scale-110 transition-transform"></div>
-                            <span class="text-xs font-mono text-cyber-primary mb-1 block" data-i18n="edu.item1.date">2024 - 2026 (Actualidad)</span>
-                            <h4 class="text-lg font-bold text-white" data-i18n="edu.item1.title">CFGS Administración de Sistemas Informáticos en Red (ASIR)</h4>
-                            <p class="text-sm text-cyber-muted">I.E.S Fernando Sagaseta</p>
+            </div>
+            <!-- Scroll Indicator -->
+            <a class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 text-cyber-muted hover:text-white transition-colors animate-bounce" href="#about">
+                <span class="text-xs font-mono">SCROLL</span>
+                <span class="material-symbols-outlined">keyboard_arrow_down</span>
+            </a>
+        </section>
+
+        <!-- ABOUT & SERVICES -->
+        <section class="py-24" id="about">
+            <div class="container mx-auto px-6">
+                <div class="grid lg:grid-cols-12 gap-12">
+                    <!-- About Text -->
+                    <div class="lg:col-span-5 space-y-8">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="h-px w-10 bg-cyber-primary"></span>
+                            <span class="text-cyber-primary font-mono tracking-widest text-sm uppercase" data-i18n="section.about">Acerca de</span>
                         </div>
-                        <!-- Edu 2 -->
-                        <div class="glass-card p-6 rounded-xl relative overflow-hidden group">
-                            <div class="absolute top-0 right-0 w-16 h-16 bg-cyber-secondary/20 rounded-bl-full group-hover:scale-110 transition-transform"></div>
-                            <span class="text-xs font-mono text-cyber-secondary mb-1 block">2022 - 2024</span>
-                            <h4 class="text-lg font-bold text-white" data-i18n="edu.item2.title">CFGM Administración de Sistemas Informáticos en Red</h4>
-                            <p class="text-sm text-cyber-muted mb-2">I.E.S Fernando Sagaseta</p>
-                            <div class="inline-block px-2 py-1 bg-cyber-secondary/20 text-cyber-secondary text-xs rounded border border-cyber-secondary/30">
-                                <span data-i18n="edu.grade">Nota Media</span>: 9.27
+                        <h2 class="text-3xl md:text-4xl font-bold text-white">
+                            <span data-i18n="about.title">Pasión por la tecnología</span> <br>
+                            <span class="text-cyber-secondary" data-i18n="about.subtitle">desde joven.</span>
+                        </h2>
+                        <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-cyber-primary/10 rounded-full blur-2xl group-hover:bg-cyber-primary/20 transition-all"></div>
+                            <p class="text-cyber-muted leading-relaxed mb-4 text-sm md:text-base" data-i18n="about.p1">
+                                Hola! Soy Fernando, una persona apasionada por informática y la tecnología. Nací y crecí en Las Palmas de Gran Canarias y actualmente resido en un pequeño pueblo de Telde.
+                            </p>
+                            <p class="text-cyber-muted leading-relaxed mb-4 text-sm md:text-base" data-i18n="about.p2">
+                                Desde joven, he sentido una profunda conexión con la informática. Siempre he encontrado inspiración y alegría en este campo en constante crecimiento, ya sea investigando o desarrollando proyectos.
+                            </p>
+                            <p class="text-cyber-muted leading-relaxed text-sm md:text-base" data-i18n="about.p3">
+                                Mi objetivo es crecer en el sector y seguir formándome de manera activa. Creo firmemente en la importancia de la superación propia, la constancia y los valores.
+                            </p>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-1 glass-card p-4 rounded-xl text-center">
+                                <span class="block text-3xl font-bold text-white mb-1">10+</span>
+                                <span class="text-xs text-cyber-muted uppercase tracking-wider" data-i18n="about.stats.years">Años Trabajando</span>
+                            </div>
+                            <div class="flex-1 glass-card p-4 rounded-xl text-center">
+                                <span class="block text-3xl font-bold text-cyber-primary mb-1">20+</span>
+                                <span class="text-xs text-cyber-muted uppercase tracking-wider" data-i18n="about.stats.certs">Certificaciones</span>
                             </div>
                         </div>
-                        <!-- Edu 3 -->
-                        <div class="glass-card p-6 rounded-xl opacity-80">
-                            <span class="text-xs font-mono text-cyber-muted mb-1 block">2025</span>
-                            <h4 class="text-lg font-bold text-white" data-i18n="edu.item3.title">Certificado Servicios Restaurante</h4>
-                            <p class="text-sm text-cyber-muted">Instituto Canario Cualificaciones</p>
+                    </div>
+                    <!-- Services Grid -->
+                    <div class="lg:col-span-7">
+                        <div class="flex items-center gap-4 mb-8">
+                            <span class="h-px w-10 bg-cyber-secondary"></span>
+                            <span class="text-cyber-secondary font-mono tracking-widest text-sm uppercase" data-i18n="section.services">Servicios &amp; Aptitudes</span>
                         </div>
-                        <!-- Edu 4 -->
-                        <div class="glass-card p-6 rounded-xl opacity-60">
-                            <span class="text-xs font-mono text-cyber-muted mb-1 block">2008 - 2011</span>
-                            <h4 class="text-lg font-bold text-white" data-i18n="edu.item4.title">CFGM Sistemas Informáticos (Incompleto)</h4>
-                            <p class="text-sm text-cyber-muted">I.E.S Lomo De La Herradura</p>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <!-- Items -->
+                            <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group"><span class="material-symbols-outlined text-cyber-primary text-3xl mb-3 group-hover:scale-110 transition-transform">database</span><h3 class="font-bold text-white text-sm" data-i18n="service.data">Recuperación de Datos</h3></div>
+                            <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group"><span class="material-symbols-outlined text-cyber-secondary text-3xl mb-3 group-hover:scale-110 transition-transform">build</span><h3 class="font-bold text-white text-sm" data-i18n="service.repair">Reparación de Equipos</h3></div>
+                            <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group"><span class="material-symbols-outlined text-cyber-accent text-3xl mb-3 group-hover:scale-110 transition-transform">cloud_upload</span><h3 class="font-bold text-white text-sm" data-i18n="service.backup">Copias de Seguridad</h3></div>
+                            <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group"><span class="material-symbols-outlined text-blue-400 text-3xl mb-3 group-hover:scale-110 transition-transform">router</span><h3 class="font-bold text-white text-sm" data-i18n="service.networks">Soporte de Redes</h3></div>
+                            <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group"><span class="material-symbols-outlined text-pink-400 text-3xl mb-3 group-hover:scale-110 transition-transform">settings_ethernet</span><h3 class="font-bold text-white text-sm" data-i18n="service.telecom">Telecomunicaciones</h3></div>
+                            <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group"><span class="material-symbols-outlined text-yellow-400 text-3xl mb-3 group-hover:scale-110 transition-transform">home_iot_device</span><h3 class="font-bold text-white text-sm" data-i18n="service.domotics">Domótica &amp; Redes</h3></div>
+                            <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group"><span class="material-symbols-outlined text-red-400 text-3xl mb-3 group-hover:scale-110 transition-transform">support_agent</span><h3 class="font-bold text-white text-sm" data-i18n="service.helpdesk">Helpdesk</h3></div>
+                            <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group"><span class="material-symbols-outlined text-purple-400 text-3xl mb-3 group-hover:scale-110 transition-transform">web</span><h3 class="font-bold text-white text-sm" data-i18n="service.web">Diseño Web / WP</h3></div>
+                            <div class="glass-card p-5 rounded-xl hover:bg-cyber-border/50 transition-all group"><span class="material-symbols-outlined text-green-400 text-3xl mb-3 group-hover:scale-110 transition-transform">security</span><h3 class="font-bold text-white text-sm" data-i18n="service.security">Ciberseguridad</h3></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Certifications Slider (Infinite Marquee) -->
-    <section class="py-20 overflow-hidden bg-cyber-dark">
-        <div class="container mx-auto px-6 mb-10 text-center">
-            <h2 class="text-3xl font-bold text-white" data-i18n="cert.title">Licencias y Certificaciones</h2>
-            <p class="text-cyber-muted text-sm mt-2" data-i18n="cert.subtitle">Formación continua y especializada</p>
-        </div>
-        <div class="relative w-full">
-            <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-cyber-dark to-transparent z-10"></div>
-            <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-cyber-dark to-transparent z-10"></div>
-            <!-- Dynamic Content populated by JS -->
-            <div class="flex gap-6 w-max animate-marquee hover:[animation-play-state:paused]" id="marqueeContainer"><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Desarrollo Web E-Commerce</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Domótica &amp; KNX</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Ciberseguridad (Google/INCIBE)</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Big Data e IA</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Cloud Computing</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Análisis de Datos Excel</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Gestión de Equipos Virtuales</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Competencias Digitales Avanzadas</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Protección de Equipos en Red</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Desarrollo Apps Móviles</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Desarrollo Web E-Commerce</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Domótica &amp; KNX</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Ciberseguridad (Google/INCIBE)</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Big Data e IA</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Cloud Computing</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Análisis de Datos Excel</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Gestión de Equipos Virtuales</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Competencias Digitales Avanzadas</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Protección de Equipos en Red</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Desarrollo Apps Móviles</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Desarrollo Web E-Commerce</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Domótica &amp; KNX</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Ciberseguridad (Google/INCIBE)</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Big Data e IA</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Cloud Computing</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Análisis de Datos Excel</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Gestión de Equipos Virtuales</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Competencias Digitales Avanzadas</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Protección de Equipos en Red</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Desarrollo Apps Móviles</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Desarrollo Web E-Commerce</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Domótica &amp; KNX</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Ciberseguridad (Google/INCIBE)</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Big Data e IA</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Cloud Computing</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Análisis de Datos Excel</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Gestión de Equipos Virtuales</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Competencias Digitales Avanzadas</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Protección de Equipos en Red</h5>
-                </div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0">
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">Desarrollo Apps Móviles</h5>
-                </div></div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section class="py-24 relative" id="skills">
-        <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Skill Category 1 -->
-                <div class="glass-card p-6 rounded-2xl">
-                    <h3 class="text-xl font-bold text-cyber-primary mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined">terminal</span> SysAdmin
-                    </h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-primary hover:text-black transition-colors cursor-default">Windows Server</span>
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-primary hover:text-black transition-colors cursor-default">Linux / GNU</span>
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-primary hover:text-black transition-colors cursor-default" data-i18n="skill.virt">Virtualización</span>
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-primary hover:text-black transition-colors cursor-default">Active Directory</span>
-                    </div>
-                </div>
-                <!-- Skill Category 2 -->
-                <div class="glass-card p-6 rounded-2xl">
-                    <h3 class="text-xl font-bold text-cyber-secondary mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined">shield</span> <span data-i18n="skill.cat.security">Seguridad</span>
-                    </h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-secondary hover:text-black transition-colors cursor-default" data-i18n="skill.cyber">Ciberseguridad</span>
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-secondary hover:text-black transition-colors cursor-default">VPN / Firewall</span>
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-secondary hover:text-black transition-colors cursor-default" data-i18n="skill.dataprotect">Protección de Datos</span>
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-secondary hover:text-black transition-colors cursor-default">Backups</span>
-                    </div>
-                </div>
-                <!-- Skill Category 3 -->
-                <div class="glass-card p-6 rounded-2xl">
-                    <h3 class="text-xl font-bold text-cyber-accent mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined">language</span> Web &amp; Cloud
-                    </h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-accent hover:text-white transition-colors cursor-default">WordPress</span>
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-accent hover:text-white transition-colors cursor-default">Microsoft 365</span>
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-accent hover:text-white transition-colors cursor-default">Google Workspace</span>
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-accent hover:text-white transition-colors cursor-default">HTML/CSS</span>
-                    </div>
-                </div>
-                <!-- Skill Category 4 -->
-                <div class="glass-card p-6 rounded-2xl">
-                    <h3 class="text-xl font-bold text-pink-500 mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined">group</span> Soft Skills
-                    </h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-pink-500 hover:text-white transition-colors cursor-default" data-i18n="skill.soft1">Trabajo en Equipo</span>
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-pink-500 hover:text-white transition-colors cursor-default" data-i18n="skill.soft2">Resolución Problemas</span>
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-pink-500 hover:text-white transition-colors cursor-default" data-i18n="skill.soft3">Comunicación</span>
-                        <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-pink-500 hover:text-white transition-colors cursor-default" data-i18n="skill.soft4">Autodidacta</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="py-24 bg-gradient-to-b from-cyber-dark to-cyber-card" id="contact">
-        <div class="container mx-auto px-6 max-w-4xl text-center">
-            <h2 class="text-4xl font-bold text-white mb-6" data-i18n="contact.title">¿Listo para conectar?</h2>
-            <p class="text-cyber-muted mb-12" data-i18n="contact.desc">
-                Estoy disponible para nuevas oportunidades y proyectos. Si buscas un profesional comprometido y apasionado, ¡hablemos!
-            </p>
-            <div class="glass-card p-8 rounded-3xl border border-cyber-border/50">
-                <form class="space-y-6 text-left">
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-cyber-muted mb-2" data-i18n="contact.name">Nombre</label>
-                            <input type="text" class="w-full bg-cyber-dark/50 border border-cyber-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyber-primary transition-colors">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-cyber-muted mb-2" data-i18n="contact.email">Email</label>
-                            <input type="email" class="w-full bg-cyber-dark/50 border border-cyber-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyber-primary transition-colors">
-                        </div>
-                    </div>
+        <!-- EXPERIENCE & EDUCATION -->
+        <section class="py-24 bg-cyber-card/30" id="experience">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-16">
+                    <span class="border-b-4 border-cyber-primary pb-2" data-i18n="section.trajectory">Trayectoria Profesional</span>
+                </h2>
+                <div class="grid lg:grid-cols-2 gap-16">
+                    <!-- Experience -->
                     <div>
-                        <label class="block text-sm font-medium text-cyber-muted mb-2" data-i18n="contact.message">Mensaje</label>
-                        <textarea rows="4" class="w-full bg-cyber-dark/50 border border-cyber-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyber-primary transition-colors"></textarea>
+                        <div class="flex items-center gap-3 mb-8">
+                            <span class="material-symbols-outlined text-cyber-primary text-3xl">work</span>
+                            <h3 class="text-2xl font-bold text-white" data-i18n="exp.title">Experiencia Laboral</h3>
+                        </div>
+                        <div class="relative pl-8 timeline-line space-y-12">
+                            <!-- Job 1 -->
+                            <div class="relative group">
+                                <div class="absolute -left-[39px] top-1 w-6 h-6 rounded-full bg-cyber-card border-2 border-cyber-primary group-hover:bg-cyber-primary transition-colors z-10"></div>
+                                <div class="glass-card p-6 rounded-xl hover:shadow-[0_5px_20px_rgba(6,182,212,0.15)] transition-all">
+                                    <span class="text-xs font-mono text-cyber-primary mb-1 block" data-i18n="exp.job1.date">Sept. 2013 - Actualidad</span>
+                                    <h4 class="text-xl font-bold text-white" data-i18n="exp.job1.title">Repartidor / Camarero de Barra</h4>
+                                    <p class="text-sm text-cyber-muted font-medium mb-3" data-i18n="exp.job1.company">Restaurante Pizzería 12-34</p>
+                                    <p class="text-sm text-gray-400" data-i18n="exp.job1.desc">Demostración de constancia, trabajo en equipo y gestión del tiempo durante más de 12 años.</p>
+                                </div>
+                            </div>
+                            <!-- Job 2 -->
+                            <div class="relative group">
+                                <div class="absolute -left-[39px] top-1 w-6 h-6 rounded-full bg-cyber-card border-2 border-cyber-secondary group-hover:bg-cyber-secondary transition-colors z-10"></div>
+                                <div class="glass-card p-6 rounded-xl border-l-4 border-l-cyber-secondary hover:shadow-[0_5px_20px_rgba(16,185,129,0.15)] transition-all">
+                                    <span class="text-xs font-mono text-cyber-secondary mb-1 block" data-i18n="exp.job2.date">May. 2025 - Jun. 2025</span>
+                                    <h4 class="text-xl font-bold text-white" data-i18n="exp.job2.title">Prácticas: Instalador Sistemas</h4>
+                                    <p class="text-sm text-cyber-muted font-medium mb-3">Grupo Inte</p>
+                                    <p class="text-sm text-gray-400" data-i18n="exp.job2.desc">Instalación y mantenimiento de sistemas de comunicaciones y redes.</p>
+                                </div>
+                            </div>
+                            <!-- Job 3 -->
+                            <div class="relative group">
+                                <div class="absolute -left-[39px] top-1 w-6 h-6 rounded-full bg-cyber-card border-2 border-cyber-accent group-hover:bg-cyber-accent transition-colors z-10"></div>
+                                <div class="glass-card p-6 rounded-xl border-l-4 border-l-cyber-accent hover:shadow-[0_5px_20px_rgba(139,92,246,0.15)] transition-all">
+                                    <span class="text-xs font-mono text-cyber-accent mb-1 block" data-i18n="exp.job3.date">Abr. 2024 - Jun. 2024</span>
+                                    <h4 class="text-xl font-bold text-white" data-i18n="exp.job3.title">Prácticas: Tec. Informático</h4>
+                                    <p class="text-sm text-cyber-muted font-medium mb-3">Cluster Marítimo de Canarias</p>
+                                    <p class="text-sm text-gray-400" data-i18n="exp.job3.desc">Resolución de incidencias, Gestión de proyectos y soporte técnico de primer nivel.</p>
+                                </div>
+                            </div>
+                            <!-- Job 4 -->
+                            <div class="relative group">
+                                <div class="absolute -left-[39px] top-1 w-6 h-6 rounded-full bg-cyber-card border-2 border-cyber-muted group-hover:bg-cyber-muted transition-colors z-10"></div>
+                                <div class="glass-card p-6 rounded-xl grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100">
+                                    <span class="text-xs font-mono text-cyber-muted mb-1 block" data-i18n="exp.job4.date">Sept. 2011 - Sept. 2012</span>
+                                    <h4 class="text-xl font-bold text-white" data-i18n="exp.job4.title">Repartidor / Camarero</h4>
+                                    <p class="text-sm text-cyber-muted font-medium">Restaurante Pizzería Il Sapore</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" class="w-full py-4 bg-gradient-to-r from-cyber-primary to-cyber-secondary text-white font-bold rounded-xl hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all transform hover:-translate-y-1">
-                        <span data-i18n="contact.send">Enviar Mensaje</span>
-                    </button>
-                </form>
+                    <!-- Education -->
+                    <div id="education">
+                        <div class="flex items-center gap-3 mb-8">
+                            <span class="material-symbols-outlined text-cyber-secondary text-3xl">school</span>
+                            <h3 class="text-2xl font-bold text-white" data-i18n="edu.title">Formación Académica</h3>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="glass-card p-6 rounded-xl relative overflow-hidden group">
+                                <div class="absolute top-0 right-0 w-16 h-16 bg-cyber-primary/20 rounded-bl-full group-hover:scale-110 transition-transform"></div>
+                                <span class="text-xs font-mono text-cyber-primary mb-1 block" data-i18n="edu.item1.date">2024 - 2026 (Actualidad)</span>
+                                <h4 class="text-lg font-bold text-white" data-i18n="edu.item1.title">CFGS Administración de Sistemas Informáticos en Red (ASIR)</h4>
+                                <p class="text-sm text-cyber-muted">I.E.S Fernando Sagaseta</p>
+                            </div>
+                            <div class="glass-card p-6 rounded-xl relative overflow-hidden group">
+                                <div class="absolute top-0 right-0 w-16 h-16 bg-cyber-secondary/20 rounded-bl-full group-hover:scale-110 transition-transform"></div>
+                                <span class="text-xs font-mono text-cyber-secondary mb-1 block">2022 - 2024</span>
+                                <h4 class="text-lg font-bold text-white" data-i18n="edu.item2.title">CFGM Administración de Sistemas Informáticos en Red</h4>
+                                <p class="text-sm text-cyber-muted mb-2">I.E.S Fernando Sagaseta</p>
+                                <div class="inline-block px-2 py-1 bg-cyber-secondary/20 text-cyber-secondary text-xs rounded border border-cyber-secondary/30"><span data-i18n="edu.grade">Nota Media</span>: 9.27</div>
+                            </div>
+                            <div class="glass-card p-6 rounded-xl opacity-80">
+                                <span class="text-xs font-mono text-cyber-muted mb-1 block">2025</span>
+                                <h4 class="text-lg font-bold text-white" data-i18n="edu.item3.title">Certificado Servicios Restaurante</h4>
+                                <p class="text-sm text-cyber-muted">Instituto Canario Cualificaciones</p>
+                            </div>
+                            <div class="glass-card p-6 rounded-xl opacity-60">
+                                <span class="text-xs font-mono text-cyber-muted mb-1 block">2008 - 2011</span>
+                                <h4 class="text-lg font-bold text-white" data-i18n="edu.item4.title">CFGM Sistemas Informáticos (Incompleto)</h4>
+                                <p class="text-sm text-cyber-muted">I.E.S Lomo De La Herradura</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="flex justify-center gap-8 mt-12">
-                <a href="#" class="text-cyber-muted hover:text-cyber-primary transition-colors flex flex-col items-center">
-                    <span class="material-symbols-outlined text-3xl">mail</span>
-                    <span class="text-xs mt-1">Email</span>
-                </a>
-                <a href="https://linkedin.com/in/fernandovalidolopez" target="_blank" class="text-cyber-muted hover:text-blue-500 transition-colors flex flex-col items-center">
-                    <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
-                    <span class="text-xs mt-1">LinkedIn</span>
-                </a>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer class="py-8 bg-cyber-dark border-t border-cyber-border text-center text-cyber-muted text-sm">
-        <p data-i18n="footer.rights">© 2026 Fernando Valido López. Telde, Canarias, España.</p>
-        <p class="text-xs mt-2 opacity-50" data-i18n="footer.designed">Designed with Cyberpunk aesthetic</p>
+        <!-- CERTIFICATIONS (Marquee) -->
+        <section class="py-20 overflow-hidden bg-cyber-dark">
+            <div class="container mx-auto px-6 mb-10 text-center">
+                <h2 class="text-3xl font-bold text-white" data-i18n="cert.title">Licencias y Certificaciones</h2>
+                <p class="text-cyber-muted text-sm mt-2" data-i18n="cert.subtitle">Formación continua y especializada</p>
+            </div>
+            <div class="relative w-full">
+                <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-cyber-dark to-transparent z-10"></div>
+                <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-cyber-dark to-transparent z-10"></div>
+                <div class="flex gap-6 w-max animate-marquee hover:[animation-play-state:paused]" id="marqueeContainer"><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Desarrollo Web E-Commerce</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Domótica &amp; KNX</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Ciberseguridad (Google/INCIBE)</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Big Data e IA</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Cloud Computing</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Análisis de Datos Excel</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Gestión de Equipos Virtuales</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Competencias Digitales Avanzadas</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Protección de Equipos en Red</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Desarrollo Apps Móviles</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Desarrollo Web E-Commerce</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Domótica &amp; KNX</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Ciberseguridad (Google/INCIBE)</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Big Data e IA</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Cloud Computing</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Análisis de Datos Excel</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Gestión de Equipos Virtuales</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Competencias Digitales Avanzadas</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Protección de Equipos en Red</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Desarrollo Apps Móviles</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Desarrollo Web E-Commerce</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Domótica &amp; KNX</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Ciberseguridad (Google/INCIBE)</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Big Data e IA</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Cloud Computing</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Análisis de Datos Excel</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Gestión de Equipos Virtuales</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Competencias Digitales Avanzadas</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Protección de Equipos en Red</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Desarrollo Apps Móviles</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Desarrollo Web E-Commerce</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Domótica &amp; KNX</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Ciberseguridad (Google/INCIBE)</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Big Data e IA</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Cloud Computing</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Análisis de Datos Excel</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Gestión de Equipos Virtuales</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Competencias Digitales Avanzadas</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Protección de Equipos en Red</h5></div><div class="w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel"><span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">Desarrollo Apps Móviles</h5></div></div>
+            </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section class="py-24" id="skills">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold text-cyber-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined">terminal</span> SysAdmin</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-primary hover:text-black transition-colors cursor-default">Windows Server</span>
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-primary hover:text-black transition-colors cursor-default">Linux / GNU</span>
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-primary hover:text-black transition-colors cursor-default" data-i18n="skill.virt">Virtualización</span>
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-primary hover:text-black transition-colors cursor-default">Active Directory</span>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold text-cyber-secondary mb-4 flex items-center gap-2"><span class="material-symbols-outlined">shield</span> <span data-i18n="skill.cat.security">Seguridad</span></h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-secondary hover:text-black transition-colors cursor-default" data-i18n="skill.cyber">Ciberseguridad</span>
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-secondary hover:text-black transition-colors cursor-default">VPN / Firewall</span>
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-secondary hover:text-black transition-colors cursor-default" data-i18n="skill.dataprotect">Protección de Datos</span>
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-secondary hover:text-black transition-colors cursor-default">Backups</span>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold text-cyber-accent mb-4 flex items-center gap-2"><span class="material-symbols-outlined">language</span> Web &amp; Cloud</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-accent hover:text-white transition-colors cursor-default">WordPress</span>
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-accent hover:text-white transition-colors cursor-default">Microsoft 365</span>
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-accent hover:text-white transition-colors cursor-default">Google Workspace</span>
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-cyber-accent hover:text-white transition-colors cursor-default">HTML/CSS</span>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold text-pink-500 mb-4 flex items-center gap-2"><span class="material-symbols-outlined">group</span> Soft Skills</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-pink-500 hover:text-white transition-colors cursor-default" data-i18n="skill.soft1">Trabajo en Equipo</span>
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-pink-500 hover:text-white transition-colors cursor-default" data-i18n="skill.soft2">Resolución Problemas</span>
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-pink-500 hover:text-white transition-colors cursor-default" data-i18n="skill.soft3">Comunicación</span>
+                            <span class="px-3 py-1 bg-cyber-border rounded-md text-xs hover:bg-pink-500 hover:text-white transition-colors cursor-default" data-i18n="skill.soft4">Autodidacta</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section class="py-24 bg-gradient-to-b from-cyber-dark to-cyber-card" id="contact">
+            <div class="container mx-auto px-6 max-w-4xl text-center">
+                <h2 class="text-4xl font-bold text-white mb-6" data-i18n="contact.title">¿Listo para conectar?</h2>
+                <p class="text-cyber-muted mb-12" data-i18n="contact.desc">Estoy disponible para nuevas oportunidades y proyectos. Si buscas un profesional comprometido y apasionado, ¡hablemos!</p>
+                <div class="glass-card p-8 rounded-3xl border border-cyber-border/50">
+                    <form class="space-y-6 text-left">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-cyber-muted mb-2" data-i18n="contact.name">Nombre</label>
+                                <input class="w-full bg-cyber-dark/50 border border-cyber-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyber-primary transition-colors" type="text">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-cyber-muted mb-2" data-i18n="contact.email">Email</label>
+                                <input class="w-full bg-cyber-dark/50 border border-cyber-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyber-primary transition-colors" type="email">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-cyber-muted mb-2" data-i18n="contact.message">Mensaje</label>
+                            <textarea class="w-full bg-cyber-dark/50 border border-cyber-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyber-primary transition-colors" rows="4"></textarea>
+                        </div>
+                        <button class="w-full py-4 bg-gradient-to-r from-cyber-primary to-cyber-secondary text-white font-bold rounded-xl hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all transform hover:-translate-y-1" type="button">
+                            <span data-i18n="contact.send">Enviar Mensaje</span>
+                        </button>
+                    </form>
+                </div>
+                <div class="flex justify-center gap-8 mt-12">
+                    <a class="text-cyber-muted hover:text-cyber-primary transition-colors flex flex-col items-center" href="#">
+                        <span class="material-symbols-outlined text-3xl">mail</span>
+                        <span class="text-xs mt-1">Email</span>
+                    </a>
+                    <a class="text-cyber-muted hover:text-blue-500 transition-colors flex flex-col items-center" href="https://linkedin.com/in/fernandovalidolopez" target="_blank">
+                        <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+                        <span class="text-xs mt-1">LinkedIn</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-8 bg-cyber-dark border-t border-cyber-border text-center text-cyber-muted text-sm flex flex-col items-center justify-center gap-4 relative z-10">
+        <div>
+            <p data-i18n="footer.rights">© 2026 Fernando Valido López. Telde, Canarias, España.</p>
+            <p class="text-xs mt-1 opacity-50" data-i18n="footer.designed">Designed with Cyberpunk aesthetic</p>
+        </div>
+        <button class="" id="footerExportBtn">
+            
+            
+        </button>
     </footer>
 
-    <!-- Scripts -->
+    <!-- SCRIPTS -->
     <script>
-        // --- 1. Loader Logic (5 Seconds Fixed, Force Visible Initially) ---
-        // Ensuring it runs robustly even on local file systems
+        // --- PRELOADER (FIXED) ---
+        // Ensure scroll to top on reload
+        window.onbeforeunload = function () { window.scrollTo(0, 0); }
+
         document.addEventListener("DOMContentLoaded", () => {
             const loader = document.getElementById('loader');
             const loaderBar = document.getElementById('loader-bar');
             const loaderText = document.getElementById('loader-text');
-            
-            // Force visibility immediately in case CSS failed
-            if(loader) {
-                loader.style.opacity = '1';
-                loader.style.visibility = 'visible';
-            }
+            const body = document.body;
+            const html = document.documentElement;
 
-            // Text steps for "System Boot" simulation
-            const steps = [
-                "INITIALIZING KERNEL...",
-                "LOADING NEURAL MODULES...",
-                "DECRYPTING PROFILE DATA...",
-                "ESTABLISHING SECURE CONNECTION...",
-                "ACCESS GRANTED"
-            ];
+            // Make sure loader is visible and top is active
+            window.scrollTo(0,0);
             
+            // Simulation Text
+            const steps = ["INITIALIZING KERNEL...", "LOADING NEURAL MODULES...", "DECRYPTING PROFILE DATA...", "ESTABLISHING SECURE CONNECTION...", "ACCESS GRANTED"];
             let stepIndex = 0;
             const textInterval = setInterval(() => {
                 stepIndex = (stepIndex + 1) % steps.length;
-                if(stepIndex < steps.length && loaderText) {
-                    loaderText.innerText = steps[stepIndex];
-                }
+                if(stepIndex < steps.length && loaderText) loaderText.innerText = steps[stepIndex];
             }, 1000);
 
-            // Trigger Progress Bar Animation
+            // Animate Bar (4.9s)
             setTimeout(() => {
                 if(loaderBar) {
                     loaderBar.style.width = '100%';
-                    // Ensure the transition duration matches the timeout (4900ms)
                     loaderBar.style.transition = 'width 4900ms linear';
                 }
             }, 100);
 
-            // Hard remove after 5000ms
+            // Finish Loading after 5s
             setTimeout(() => {
                 clearInterval(textInterval);
                 if (loader) {
                     loader.style.opacity = '0';
-                    loader.style.visibility = 'hidden'; 
-                    // Optional: Remove from DOM to free resources, but opacity 0 is fine
-                    setTimeout(() => loader.style.display = 'none', 500);
+                    loader.style.visibility = 'hidden';
                 }
+                body.classList.remove('loading');
+                html.classList.add('loaded'); // Enables smooth scroll
+                
+                // Remove from DOM to save resources
+                setTimeout(() => { if(loader) loader.style.display = 'none'; }, 500);
             }, 5000);
         });
 
-        // --- 2. Mobile Menu Logic (Bug Fixed) ---
-        const menuBtn = document.getElementById('menuBtn');
-        const closeMenuBtn = document.getElementById('closeMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const mobileLinks = mobileMenu.querySelectorAll('a');
-
-        function openMenu() {
-            mobileMenu.classList.remove('translate-x-full');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
-        }
-
-        function closeMenu() {
-            mobileMenu.classList.add('translate-x-full');
-            document.body.style.overflow = ''; // Restore scrolling
-        }
-
-        menuBtn.addEventListener('click', openMenu);
-        closeMenuBtn.addEventListener('click', closeMenu);
-
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', closeMenu);
-        });
-
-        // --- 3. Translations ---
-        const translations = {
-            es: {
-                "nav.about": "Sobre Mí",
-                "nav.experience": "Experiencia",
-                "nav.education": "Educación",
-                "nav.skills": "Habilidades",
-                "nav.contact": "Contactar",
-                "nav.export": "Exportar Código",
-                "hero.desc": "Técnico Superior en Administración de Sistemas Informáticos en Red (ASIR). Especialista en soporte técnico, gestión de redes y microinformática.",
-                "hero.cta": "Ver Proyectos",
-                "section.about": "Acerca de",
-                "about.title": "Pasión por la tecnología",
-                "about.subtitle": "desde joven.",
-                "about.p1": "Hola! Soy Fernando, una persona apasionada por informática y la tecnología. Nací y crecí en Las Palmas de Gran Canarias y actualmente resido en un pequeño pueblo de Telde.",
-                "about.p2": "Desde joven, he sentido una profunda conexión con la informática. Siempre he encontrado inspiración y alegría en este campo en constante crecimiento, ya sea investigando o desarrollando proyectos.",
-                "about.p3": "Mi objetivo es crecer en el sector y seguir formándome de manera activa. Creo firmemente en la importancia de la superación propia, la constancia y los valores.",
-                "about.stats.years": "Años Trabajando",
-                "about.stats.certs": "Certificaciones",
-                "section.services": "Servicios & Aptitudes",
-                "service.data": "Recuperación de Datos",
-                "service.repair": "Reparación de Equipos",
-                "service.backup": "Copias de Seguridad",
-                "service.networks": "Soporte de Redes",
-                "service.telecom": "Telecomunicaciones",
-                "service.domotics": "Domótica & Redes",
-                "service.helpdesk": "Helpdesk",
-                "service.web": "Diseño Web / WP",
-                "service.security": "Ciberseguridad",
-                "section.trajectory": "Trayectoria Profesional",
-                "exp.title": "Experiencia Laboral",
-                "exp.job1.date": "Sept. 2013 - Actualidad",
-                "exp.job1.title": "Repartidor / Camarero de Barra",
-                "exp.job1.company": "Restaurante Pizzería 12-34",
-                "exp.job1.desc": "Demostración de constancia, trabajo en equipo y gestión del tiempo durante más de 12 años.",
-                "exp.job2.date": "May. 2025 - Jun. 2025",
-                "exp.job2.title": "Prácticas: Instalador Sistemas",
-                "exp.job2.desc": "Instalación y mantenimiento de sistemas de comunicaciones y redes.",
-                "exp.job3.date": "Abr. 2024 - Jun. 2024",
-                "exp.job3.title": "Prácticas: Tec. Informático",
-                "exp.job3.desc": "Resolución de incidencias, Gestión de proyectos y soporte técnico de primer nivel.",
-                "exp.job4.date": "Sept. 2011 - Sept. 2012",
-                "exp.job4.title": "Repartidor / Camarero",
-                "edu.title": "Formación Académica",
-                "edu.item1.date": "2024 - 2026 (Actualidad)",
-                "edu.item1.title": "CFGS Administración de Sistemas Informáticos en Red (ASIR)",
-                "edu.item2.title": "CFGM Administración de Sistemas Informáticos en Red",
-                "edu.grade": "Nota Media",
-                "edu.item3.title": "Certificado Servicios Restaurante",
-                "edu.item4.title": "CFGM Sistemas Informáticos (Incompleto)",
-                "cert.title": "Licencias y Certificaciones",
-                "cert.subtitle": "Formación continua y especializada",
-                "skill.virt": "Virtualización",
-                "skill.cat.security": "Seguridad",
-                "skill.cyber": "Ciberseguridad",
-                "skill.dataprotect": "Protección de Datos",
-                "skill.soft1": "Trabajo en Equipo",
-                "skill.soft2": "Resolución Problemas",
-                "skill.soft3": "Comunicación",
-                "skill.soft4": "Autodidacta",
-                "contact.title": "¿Listo para conectar?",
-                "contact.desc": "Estoy disponible para nuevas oportunidades y proyectos. Si buscas un profesional comprometido y apasionado, ¡hablemos!",
-                "contact.name": "Nombre",
-                "contact.email": "Email",
-                "contact.message": "Mensaje",
-                "contact.send": "Enviar Mensaje",
-                "footer.rights": "© 2026 Fernando Valido López. Telde, Canarias, España.",
-                "footer.designed": "Diseñado con estética Cyberpunk"
-            },
-            en: {
-                "nav.about": "About Me",
-                "nav.experience": "Experience",
-                "nav.education": "Education",
-                "nav.skills": "Skills",
-                "nav.contact": "Contact",
-                "nav.export": "Export Code",
-                "hero.desc": "Higher Technician in Network Computer Systems Administration (ASIR). Specialist in technical support, network management, and microcomputing.",
-                "hero.cta": "View Projects",
-                "section.about": "About",
-                "about.title": "Passion for Technology",
-                "about.subtitle": "since young.",
-                "about.p1": "Hello! I'm Fernando, a person passionate about computing and technology. Born and raised in Las Palmas de Gran Canaria, currently residing in a small town in Telde.",
-                "about.p2": "Since I was young, I've felt a deep connection with computing. I have always found inspiration and joy in this ever-growing field, whether researching or developing projects.",
-                "about.p3": "My goal is to grow in the sector and continue training actively. I firmly believe in self-improvement, perseverance, and strong values.",
-                "about.stats.years": "Years Working",
-                "about.stats.certs": "Certifications",
-                "section.services": "Services & Skills",
-                "service.data": "Data Recovery",
-                "service.repair": "Hardware Repair",
-                "service.backup": "Backups",
-                "service.networks": "Network Support",
-                "service.telecom": "Telecommunications",
-                "service.domotics": "Domotics & IoT",
-                "service.helpdesk": "Helpdesk",
-                "service.web": "Web Design / WP",
-                "service.security": "Cybersecurity",
-                "section.trajectory": "Professional Trajectory",
-                "exp.title": "Work Experience",
-                "exp.job1.date": "Sept. 2013 - Present",
-                "exp.job1.title": "Delivery Driver / Bar Waiter",
-                "exp.job1.company": "Pizzeria Restaurant 12-34",
-                "exp.job1.desc": "Demonstrating perseverance, teamwork, and time management for over 12 years.",
-                "exp.job2.date": "May 2025 - Jun. 2025",
-                "exp.job2.title": "Internship: Systems Installer",
-                "exp.job2.desc": "Installation and maintenance of communications systems and networks.",
-                "exp.job3.date": "Apr. 2024 - Jun. 2024",
-                "exp.job3.title": "Internship: IT Technician",
-                "exp.job3.desc": "Incident resolution, Project management, and Tier 1 technical support.",
-                "exp.job4.date": "Sept. 2011 - Sept. 2012",
-                "exp.job4.title": "Delivery Driver / Waiter",
-                "edu.title": "Academic Background",
-                "edu.item1.date": "2024 - 2026 (Current)",
-                "edu.item1.title": "Higher Technician in Network Systems Admin (ASIR)",
-                "edu.item2.title": "Mid-Level Technician in Network Systems Admin",
-                "edu.grade": "Average Grade",
-                "edu.item3.title": "Restaurant Services Certificate",
-                "edu.item4.title": "Mid-Level Technician IT Systems (Incomplete)",
-                "cert.title": "Licenses & Certifications",
-                "cert.subtitle": "Continuous and specialized training",
-                "skill.virt": "Virtualization",
-                "skill.cat.security": "Security",
-                "skill.cyber": "Cybersecurity",
-                "skill.dataprotect": "Data Protection",
-                "skill.soft1": "Teamwork",
-                "skill.soft2": "Problem Solving",
-                "skill.soft3": "Communication",
-                "skill.soft4": "Self-taught",
-                "contact.title": "Ready to connect?",
-                "contact.desc": "I am available for new opportunities and projects. If you are looking for a committed and passionate professional, let's talk!",
-                "contact.name": "Name",
-                "contact.email": "Email",
-                "contact.message": "Message",
-                "contact.send": "Send Message",
-                "footer.rights": "© 2026 Fernando Valido López. Telde, Canarias, Spain.",
-                "footer.designed": "Designed with Cyberpunk aesthetic"
-            }
+        // --- MARQUEE RENDERER (OPTIMIZED) ---
+        const certsData = {
+            es: ["Desarrollo Web E-Commerce", "Domótica & KNX", "Ciberseguridad (Google/INCIBE)", "Big Data e IA", "Cloud Computing", "Análisis de Datos Excel", "Gestión de Equipos Virtuales", "Competencias Digitales Avanzadas", "Protección de Equipos en Red", "Desarrollo Apps Móviles"],
+            en: ["E-Commerce Web Dev", "Domotics & KNX", "Cybersecurity (Google/INCIBE)", "Big Data & AI", "Cloud Computing", "Excel Data Analysis", "Virtual Team Management", "Advanced Digital Skills", "Network Device Protection", "Mobile App Development"]
         };
 
-        const certsData = {
-            es: [
-                "Desarrollo Web E-Commerce", "Domótica & KNX", "Ciberseguridad (Google/INCIBE)", 
-                "Big Data e IA", "Cloud Computing", "Análisis de Datos Excel", 
-                "Gestión de Equipos Virtuales", "Competencias Digitales Avanzadas", 
-                "Protección de Equipos en Red", "Desarrollo Apps Móviles"
-            ],
-            en: [
-                "E-Commerce Web Dev", "Domotics & KNX", "Cybersecurity (Google/INCIBE)",
-                "Big Data & AI", "Cloud Computing", "Excel Data Analysis",
-                "Virtual Team Management", "Advanced Digital Skills",
-                "Network Device Protection", "Mobile App Development"
-            ]
+        function renderMarquee(lang = 'es') {
+            const container = document.getElementById('marqueeContainer');
+            if(!container) return;
+            container.innerHTML = ''; 
+            
+            const currentCerts = certsData[lang];
+            // 4x duplication for seamless infinite scroll on wide screens
+            const displayCerts = [...currentCerts, ...currentCerts, ...currentCerts, ...currentCerts];
+            
+            displayCerts.forEach(cert => {
+                const div = document.createElement('div');
+                div.className = "w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0 hw-accel";
+                div.innerHTML = `<span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span><h5 class="text-sm font-bold text-white leading-tight">${cert}</h5>`;
+                container.appendChild(div);
+            });
+        }
+
+        // --- TRANSLATIONS ---
+        const translations = {
+            es: { "nav.about": "Sobre Mí", "nav.experience": "Experiencia", "nav.education": "Educación", "nav.skills": "Habilidades", "nav.contact": "Contactar", "nav.export": "Exportar Código", "hero.desc": "Técnico Superior en Administración de Sistemas Informáticos en Red (ASIR). Especialista en soporte técnico, gestión de redes y microinformática.", "hero.cta": "Ver Proyectos", "section.about": "Acerca de", "about.title": "Pasión por la tecnología", "about.subtitle": "desde joven.", "about.p1": "Hola! Soy Fernando, una persona apasionada por informática y la tecnología. Nací y crecí en Las Palmas de Gran Canarias y actualmente resido en un pequeño pueblo de Telde.", "about.p2": "Desde joven, he sentido una profunda conexión con la informática. Siempre he encontrado inspiración y alegría en este campo en constante crecimiento, ya sea investigando o desarrollando proyectos.", "about.p3": "Mi objetivo es crecer en el sector y seguir formándome de manera activa. Creo firmemente en la importancia de la superación propia, la constancia y los valores.", "about.stats.years": "Años Trabajando", "about.stats.certs": "Certificaciones", "section.services": "Servicios & Aptitudes", "service.data": "Recuperación de Datos", "service.repair": "Reparación de Equipos", "service.backup": "Copias de Seguridad", "service.networks": "Soporte de Redes", "service.telecom": "Telecomunicaciones", "service.domotics": "Domótica & Redes", "service.helpdesk": "Helpdesk", "service.web": "Diseño Web / WP", "service.security": "Ciberseguridad", "section.trajectory": "Trayectoria Profesional", "exp.title": "Experiencia Laboral", "exp.job1.date": "Sept. 2013 - Actualidad", "exp.job1.title": "Repartidor / Camarero de Barra", "exp.job1.company": "Restaurante Pizzería 12-34", "exp.job1.desc": "Demostración de constancia, trabajo en equipo y gestión del tiempo durante más de 12 años.", "exp.job2.date": "May. 2025 - Jun. 2025", "exp.job2.title": "Prácticas: Instalador Sistemas", "exp.job2.desc": "Instalación y mantenimiento de sistemas de comunicaciones y redes.", "exp.job3.date": "Abr. 2024 - Jun. 2024", "exp.job3.title": "Prácticas: Tec. Informático", "exp.job3.desc": "Resolución de incidencias, Gestión de proyectos y soporte técnico de primer nivel.", "exp.job4.date": "Sept. 2011 - Sept. 2012", "exp.job4.title": "Repartidor / Camarero", "edu.title": "Formación Académica", "edu.item1.date": "2024 - 2026 (Actualidad)", "edu.item1.title": "CFGS Administración de Sistemas Informáticos en Red (ASIR)", "edu.item2.title": "CFGM Administración de Sistemas Informáticos en Red", "edu.grade": "Nota Media", "edu.item3.title": "Certificado Servicios Restaurante", "edu.item4.title": "CFGM Sistemas Informáticos (Incompleto)", "cert.title": "Licencias y Certificaciones", "cert.subtitle": "Formación continua y especializada", "skill.virt": "Virtualización", "skill.cat.security": "Seguridad", "skill.cyber": "Ciberseguridad", "skill.dataprotect": "Protección de Datos", "skill.soft1": "Trabajo en Equipo", "skill.soft2": "Resolución Problemas", "skill.soft3": "Comunicación", "skill.soft4": "Autodidacta", "contact.title": "¿Listo para conectar?", "contact.desc": "Estoy disponible para nuevas oportunidades y proyectos. Si buscas un profesional comprometido y apasionado, ¡hablemos!", "contact.name": "Nombre", "contact.email": "Email", "contact.message": "Mensaje", "contact.send": "Enviar Mensaje", "footer.rights": "© 2026 Fernando Valido López. Telde, Canarias, España.", "footer.designed": "Diseñado con estética Cyberpunk" },
+            en: { "nav.about": "About Me", "nav.experience": "Experience", "nav.education": "Education", "nav.skills": "Skills", "nav.contact": "Contact", "nav.export": "Export Code", "hero.desc": "Higher Technician in Network Computer Systems Administration (ASIR). Specialist in technical support, network management, and microcomputing.", "hero.cta": "View Projects", "section.about": "About", "about.title": "Passion for Technology", "about.subtitle": "since young.", "about.p1": "Hello! I'm Fernando, a person passionate about computing and technology. Born and raised in Las Palmas de Gran Canaria, currently residing in a small town in Telde.", "about.p2": "Since I was young, I've felt a deep connection with computing. I have always found inspiration and joy in this ever-growing field, whether researching or developing projects.", "about.p3": "My goal is to grow in the sector and continue training actively. I firmly believe in self-improvement, perseverance, and strong values.", "about.stats.years": "Years Working", "about.stats.certs": "Certifications", "section.services": "Services & Skills", "service.data": "Data Recovery", "service.repair": "Hardware Repair", "service.backup": "Backups", "service.networks": "Network Support", "service.telecom": "Telecommunications", "service.domotics": "Domotics & IoT", "service.helpdesk": "Helpdesk", "service.web": "Web Design / WP", "service.security": "Cybersecurity", "section.trajectory": "Professional Trajectory", "exp.title": "Work Experience", "exp.job1.date": "Sept. 2013 - Present", "exp.job1.title": "Delivery Driver / Bar Waiter", "exp.job1.company": "Pizzeria Restaurant 12-34", "exp.job1.desc": "Demonstrating perseverance, teamwork, and time management for over 12 years.", "exp.job2.date": "May 2025 - Jun. 2025", "exp.job2.title": "Internship: Systems Installer", "exp.job2.desc": "Installation and maintenance of communications systems and networks.", "exp.job3.date": "Apr. 2024 - Jun. 2024", "exp.job3.title": "Internship: IT Technician", "exp.job3.desc": "Incident resolution, Project management, and Tier 1 technical support.", "exp.job4.date": "Sept. 2011 - Sept. 2012", "exp.job4.title": "Delivery Driver / Waiter", "edu.title": "Academic Background", "edu.item1.date": "2024 - 2026 (Current)", "edu.item1.title": "Higher Technician in Network Systems Admin (ASIR)", "edu.item2.title": "Mid-Level Technician in Network Systems Admin", "edu.grade": "Average Grade", "edu.item3.title": "Restaurant Services Certificate", "edu.item4.title": "Mid-Level Technician IT Systems (Incomplete)", "cert.title": "Licenses & Certifications", "cert.subtitle": "Continuous and specialized training", "skill.virt": "Virtualization", "skill.cat.security": "Security", "skill.cyber": "Cybersecurity", "skill.dataprotect": "Data Protection", "skill.soft1": "Teamwork", "skill.soft2": "Problem Solving", "skill.soft3": "Communication", "skill.soft4": "Self-taught", "contact.title": "Ready to connect?", "contact.desc": "I am available for new opportunities and projects. If you are looking for a committed and passionate professional, let's talk!", "contact.name": "Name", "contact.email": "Email", "contact.message": "Message", "contact.send": "Send Message", "footer.rights": "© 2026 Fernando Valido López. Telde, Canarias, Spain.", "footer.designed": "Designed with Cyberpunk aesthetic" }
         };
 
         let currentLang = 'es';
         const langToggle = document.getElementById('langToggle');
 
         function updateLang() {
-            // Update static text
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (translations[currentLang][key]) {
-                    el.innerText = translations[currentLang][key];
-                }
+                if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
             });
             langToggle.innerText = currentLang.toUpperCase();
-            
-            // Re-render cert marquee
-            renderMarquee();
+            renderMarquee(currentLang);
         }
 
         langToggle.addEventListener('click', () => {
@@ -1288,13 +974,10 @@ function(){de()}):de()})();}).call(this);
             updateLang();
         });
 
-        // --- 4. Typewriter Effect ---
+        // --- TYPEWRITER ---
         const rolesES = ["SysAdmin", "Soporte Técnico", "Especialista IT", "Admin. de Redes"];
         const rolesEN = ["SysAdmin", "Tech Support", "IT Specialist", "Network Admin"];
-        
-        let roleIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
+        let roleIndex = 0, charIndex = 0, isDeleting = false;
         const typeEl = document.getElementById('typewriter');
 
         function type() {
@@ -1321,66 +1004,13 @@ function(){de()}):de()})();}).call(this);
                 setTimeout(type, isDeleting ? 50 : 100);
             }
         }
-        type();
-
-        // --- 5. Marquee Renderer (Optimized & Slower) ---
-        function renderMarquee() {
-            const container = document.getElementById('marqueeContainer');
-            if(!container) return;
-            container.innerHTML = ''; 
-            
-            const currentCerts = certsData[currentLang];
-            // Duplicate the list enough times to ensure seamless scrolling on large screens
-            // We animate from translateX(0) to translateX(-50%) so we need 2 sets to look like 1 full loop
-            const displayCerts = [...currentCerts, ...currentCerts, ...currentCerts, ...currentCerts];
-            
-            displayCerts.forEach(cert => {
-                const div = document.createElement('div');
-                div.className = "w-64 h-32 glass-card rounded-lg p-4 flex flex-col justify-center items-center text-center border-l-2 border-cyber-primary flex-shrink-0";
-                div.innerHTML = `
-                    <span class="material-symbols-outlined text-cyber-primary mb-2">workspace_premium</span>
-                    <h5 class="text-sm font-bold text-white leading-tight">${cert}</h5>
-                `;
-                container.appendChild(div);
-            });
-        }
-        renderMarquee();
-
-        // --- 6. Navbar Scroll Spy ---
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('bg-cyber-dark/80', 'backdrop-blur-md', 'shadow-lg');
-            } else {
-                navbar.classList.remove('bg-cyber-dark/80', 'backdrop-blur-md', 'shadow-lg');
-            }
-        });
-
-        // --- 7. Export Feature ---
-        function downloadSource() {
-            const htmlContent = document.documentElement.outerHTML;
-            const fullHtml = `<!DOCTYPE html>\n${htmlContent}`;
-            const blob = new Blob([fullHtml], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'fernando-valido-portfolio.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        document.getElementById('exportBtn').addEventListener('click', downloadSource);
-        document.getElementById('mobileExportBtn').addEventListener('click', downloadSource);
-
-        // --- 8. Canvas Animation (Optimized) ---
+        
+        // --- CANVAS ANIMATION (OPTIMIZED) ---
         const canvas = document.getElementById('networkCanvas');
         const ctx = canvas.getContext('2d');
         let width, height;
         let particles = [];
-        
-        const particleCount = window.innerWidth < 768 ? 25 : 50;
+        const particleCount = window.innerWidth < 768 ? 20 : 40; 
 
         function resize() {
             width = window.innerWidth;
@@ -1393,8 +1023,8 @@ function(){de()}):de()})();}).call(this);
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
+                this.vx = (Math.random() - 0.5) * 0.3; // Slower movement
+                this.vy = (Math.random() - 0.5) * 0.3;
                 this.size = Math.random() * 2;
             }
             update() {
@@ -1413,9 +1043,7 @@ function(){de()}):de()})();}).call(this);
 
         function initParticles() {
             particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
+            for (let i = 0; i < particleCount; i++) particles.push(new Particle());
         }
 
         function animate() {
@@ -1427,9 +1055,9 @@ function(){de()}):de()})();}).call(this);
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < 150) {
+                    if (distance < 120) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(6, 182, 212, ${1 - distance / 150})`;
+                        ctx.strokeStyle = `rgba(6, 182, 212, ${1 - distance / 120})`;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -1440,15 +1068,59 @@ function(){de()}):de()})();}).call(this);
             requestAnimationFrame(animate);
         }
 
-        window.addEventListener('resize', () => {
-            resize();
-            initParticles();
+        // --- MENU LOGIC ---
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+
+        function openMenu() {
+            mobileMenu.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMenu() {
+            mobileMenu.classList.add('translate-x-full');
+            document.body.style.overflow = '';
+        }
+        menuBtn.addEventListener('click', openMenu);
+        closeMenuBtn.addEventListener('click', closeMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+        // --- SCROLL SPY ---
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-cyber-dark/80', 'backdrop-blur-md', 'shadow-lg');
+            } else {
+                navbar.classList.remove('bg-cyber-dark/80', 'backdrop-blur-md', 'shadow-lg');
+            }
         });
-        
+
+        // --- EXPORT ---
+        function downloadSource() {
+            const htmlContent = document.documentElement.outerHTML;
+            const fullHtml = `<!DOCTYPE html>\n${htmlContent}`;
+            const blob = new Blob([fullHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'fernando-valido-portfolio.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        document.getElementById('footerExportBtn').addEventListener('click', downloadSource);
+
+        // --- INIT ---
+        window.addEventListener('resize', () => { resize(); initParticles(); });
         resize();
         initParticles();
         animate();
+        type();
+        renderMarquee(currentLang);
 
     </script>
+
 
 </body></html>
